@@ -9,7 +9,7 @@
 
 ## Thành viên nhóm
 
-**Lớp:** L3B · **Bàn / zone:** PC03 · **Track:** T2 – Giáo dục
+**Lớp:** L3B · **Track:** T2 – Giáo dục
 
 | Họ và Tên | Mã Học Viên | Việc đã làm |
 |---|---|---|
