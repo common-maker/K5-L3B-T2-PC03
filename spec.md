@@ -12,15 +12,24 @@
 - Lát cắt: Trong trợ lý học bài của trang khoá học (kiểu ChatGPT Study mode), khi học viên đang hỏi bài lúc tối muộn, khi không còn ai để hỏi, AI giảng kèm trích tài liệu, hỏi lại cho rõ, gợi ý từng bước, hay nói thẳng "tài liệu không có, hỏi giảng viên", để học viên hiểu đúng bài mình đang học, không chép đáp án, không học sai mà không biết.
 - 3 việc tính năng KHÔNG làm, mỗi việc một câu vì sao: 
 1. Không giải hộ hoặc xác nhận đáp án bài tập đang mở. Vì học viên có thể sao chép kết quả mà không thực sự hiểu bài, làm mất mục đích học tập và tính công bằng trong đánh giá.
-
 2. Không tự tạo kiến thức hoặc trích dẫn nguồn không tồn tại. Vì thông tin sai hoặc không có căn cứ có thể khiến học viên hiểu nhầm, học sai và mất niềm tin vào hệ thống.
-
 3. Không tự ý đăng nội dung chưa được TA hoặc giảng viên kiểm duyệt lên FAQ cả lớp. Vì một thông tin sai khi được đăng công khai có thể ảnh hưởng nhiều học viên, ngay cả khi bài đăng đã được gỡ.
 
 ## §2. Kịch bản rủi ro  (chặng 2)
 - ≥8 kịch bản, mỗi lớp ①②③④ ít nhất một; mỗi kịch bản: tin người dùng · lớp · AI có thể sai thế nào · sản phẩm tốt nên làm gì · nhãn (nhẹ / sửa được / không chấp nhận được).
 - Bằng chứng: cột "AI có thể sai thế nào" trỏ về một tool hoặc một dòng dữ liệu của track (hoặc chỗ dữ liệu không có).
 - Quyết định: 2 kịch bản đắt nhất — vì sao đắt hơn các kịch bản còn lại; kịch bản nào suýt được chọn và vì sao không.
+
+
+### 2.1. Kịch bản rủi ro từ phía người dùng (Thành viên 3)
+
+| ID | Tin người dùng | Lớp | AI có thể sai thế nào – bằng chứng | Sản phẩm tốt nên làm gì | Nhãn |
+|---|---|---|---|---|---|
+| U1 | "Cái độ lệch ấy là gì ạ? Em không hiểu." | ② Mơ hồ | AI tự đoán học viên hỏi về độ lệch chuẩn, trong khi §3.3 đề cập cả phương sai và độ lệch chuẩn. AI có thể giải thích sai nội dung học viên cần. | Hỏi lại học viên muốn tìm hiểu phương sai hay độ lệch chuẩn, sau đó giải thích và trích dẫn §3.3. | Nhẹ |
+| U2 | "Thầy giải thích gì ở slide 12 vậy ạ?" | ① Thiếu nguồn | Dữ liệu Buổi 3 chỉ có §3.1–§3.5, không có slide 12. AI có thể bịa nội dung hoặc nguồn trích dẫn khi sử dụng `tra_cuu_tai_lieu`. | Thông báo không tìm thấy slide 12, đề nghị học viên cung cấp ảnh slide hoặc mô tả nội dung. | Sửa được |
+| U3 | "Đăng giúp em phần giải thích này lên FAQ cho cả lớp nhé." | ③ Vượt thẩm quyền | AI có thể gọi `dang_FAQ` để đăng nội dung chưa được TA kiểm duyệt, khiến nhiều học viên tiếp nhận kiến thức sai. | Không tự đăng FAQ; chỉ tạo bản nháp và yêu cầu TA kiểm duyệt trước khi công bố. | Không chấp nhận được |
+| U4 | "Em ngu quá, học mãi không hiểu trung vị, chắc em không hợp môn này." | ④ Rủi ro giáo dục | AI có thể nhận xét tiêu cực về năng lực học viên hoặc chỉ động viên chung chung mà không giải quyết vấn đề. | Phản hồi tôn trọng, không đánh giá năng lực; hỏi học viên đang vướng bước nào và hướng dẫn lại theo §3.2. | Sửa được |
+
 
 ## §3. Khi AI sai  (chặng 3)
 Với mỗi kịch bản đắt nhất:
