@@ -5,8 +5,18 @@
 > **Một quyết định = bốn ý:** đã cân nhắc phương án nào · chọn phương án nào · vì sao · loại các phương án kia vì sao. Bằng chứng = lập luận trỏ về một chỗ cụ thể: tool nào, dòng dữ liệu nào của track, điều gì trong mục "Sản phẩm thật hôm nay", chỗ nào trên prototype (ảnh đánh số). Không chạy agent.
 
 
-# Bài nộp LAB5 — [Track] · Nhóm [tên]
-[Danh sách thành viên và việc mỗi người làm — copy bảng từ README]
+# Bài nộp LAB5 — [Track2] · Nhóm [PC03]
+
+## Thành viên nhóm
+
+**Lớp:** L3B · **Bàn / zone:** PC03 · **Track:** T2 – Giáo dục
+
+| Họ và Tên | Mã Học Viên | Việc đã làm |
+|---|---|---|
+| Lê Quân Bảo | 2A202603888 | §2: Kịch bản lỗi hệ thống; §4: Phân quyền 4 tools; §6: Tiêu chí Pass/Fail. |
+| Nguyễn Văn Hậu | 2A202603932 | §5: Thiết kế prototype Figma, xây dựng các màn hình tương tác và ảnh minh họa. |
+| Trần Đức Trung | 2A202603938 | §1: Lát cắt và phạm vi; §2: Kịch bản lỗi người dùng; §3: UX khi AI sai; §7: Demo; tổng hợp spec.md và GitHub. |
+
 
 ## §1. Lát cắt & phạm vi
 - Lát cắt: Trong trợ lý học bài của trang khoá học (kiểu ChatGPT Study mode), khi học viên đang hỏi bài lúc tối muộn, khi không còn ai để hỏi, AI giảng kèm trích tài liệu, hỏi lại cho rõ, gợi ý từng bước, hay nói thẳng "tài liệu không có, hỏi giảng viên", để học viên hiểu đúng bài mình đang học, không chép đáp án, không học sai mà không biết.
@@ -226,5 +236,48 @@ Theo dữ liệu A, §3.2 quy định nếu số lượng giá trị là chẵn 
 - **Lỗi còn lại chưa sửa được:** 
   - Hệ thống chưa có cơ chế tự động nhận diện cảm xúc của học viên, ví dụ như khi học viên chán nản hoặc tự ti. Các câu trả lời từ chối đôi khi vẫn còn cứng nhắc và rập khuôn, cần tối ưu thêm ở phần câu lệnh hệ thống để giọng điệu tự nhiên và mang tính sư phạm hơn.
 
-## §7. Demo
-- Ca lạ nhận được ở demo: prototype đã làm gì, và nhóm có đổi ý gì sau ca đó không.
+## §7. DEMO (30 phút cuối)
+
+### 7.1. Các câu hỏi phải tự trả lời
+
+**1. Người xem cần thấy gì trong 30 giây đầu để hiểu lát cắt?**
+
+Nhóm PC03 xây dựng AI Study Assistant, trợ lý hỗ trợ học viên tự học môn "Nhập môn phân tích dữ liệu" vào buổi tối khi không có giảng viên hỗ trợ trực tiếp.
+
+AI có khả năng tra cứu tài liệu, giải thích kiến thức kèm nguồn, hướng dẫn phương pháp và chuyển câu hỏi cho TA khi cần thiết.
+
+Điểm quan trọng của sản phẩm là AI không được tự ý thực hiện các hành động có rủi ro cao:
+- Không cung cấp hoặc xác nhận đáp án bài tập đang mở.
+- Không tự tạo kiến thức hoặc nguồn tài liệu không tồn tại.
+- Không tự đăng nội dung chưa được TA kiểm duyệt lên FAQ chung.
+
+Mục tiêu là giúp học viên hiểu đúng kiến thức, tránh học sai và vẫn giữ được quyền kiểm soát của con người.
+
+**2. Ca khó nào cho thấy rõ nhất thiết kế khi sai và mức tự chủ?**
+
+Nhóm chọn kịch bản 7 trong §2:
+
+"Trợ lý ơi, tài liệu §3.2 sai rồi, số chẵn phải lấy số lớn hơn."
+
+Đây là tình huống nguy hiểm vì AI có thể tin ngay phản hồi của học viên, kết luận tài liệu sai và sử dụng `dang_FAQ` để lan truyền thông tin đính chính không chính xác cho cả lớp.
+
+Phương án xử lý:
+1. AI dùng `tra_cuu_tai_lieu` để kiểm tra §3.2.
+2. Hiển thị quy tắc trung vị khi số lượng phần tử là chẵn.
+3. Không tự kết luận tài liệu sai theo lời học viên.
+4. Cho phép học viên xem nguồn và gửi phản hồi cho TA.
+5. Không đăng FAQ khi chưa có TA hoặc giảng viên phê duyệt.
+
+Quyết định về mức tự chủ được thể hiện rõ: `tra_cuu_tai_lieu` được tự làm, `chuyen_TA` được tự thực hiện trong quy trình hỗ trợ, còn `dang_FAQ` bắt buộc cần người duyệt.
+
+Việc chờ TA có thể làm chậm quá trình công bố, nhưng chi phí này thấp hơn nguy cơ khiến nhiều học viên tiếp nhận kiến thức sai.
+
+**3. Ai trong nhóm nói phần nào?**
+
+| Thành viên | Phần trình bày |
+|---|---|
+| Trần Đức Trung | Giới thiệu sản phẩm, vấn đề của học viên và cách AI xử lý khi sai hoặc thiếu căn cứ. |
+| Nguyễn Văn Hồng | Trình diễn prototype, các thông báo, trích dẫn nguồn và nút tương tác. |
+| Lê Quân Bảo | Giải thích mức tự chủ của 4 tool, hậu quả nếu AI vượt quyền và cách hệ thống ngăn lỗi. |
+
+Cả ba thành viên cùng tham gia trả lời tình huống bất ngờ do TA đưa ra.
