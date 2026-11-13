@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Prototype · ChatGPT Study Mode · T2 Giáo dục</title>
+<title>ChatGPT · Study Mode — Nhập môn phân tích dữ liệu</title>
 <style>
 :root{
-  --bg:#f7f7f8;--card:#fff;--sub:#f4f4f4;--ink:#0d0d0d;--mut:#666;--line:#e5e5e5;
+  --bg:#ffffff;--side:#f9f9f9;--panel:#fafafa;--sub:#f4f4f4;--ink:#0d0d0d;--mut:#6e6e80;--line:#e5e5e5;
   --study:#4f46e5;--study-bg:#eef2ff;--study-line:#c7d2fe;
   --ok:#10a37f;--ok-bg:#ecfdf5;--ok-line:#a7f3d0;
   --warn:#b45309;--warn-bg:#fffbeb;--warn-line:#fde68a;
@@ -14,141 +14,163 @@
   --badge:#c2410c;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Inter","Be Vietnam Pro",sans-serif;color:var(--ink);background:var(--bg);font-size:14.5px;line-height:1.45}
+html,body{height:100%}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Inter","Be Vietnam Pro",sans-serif;color:var(--ink);background:var(--bg);font-size:14.5px;line-height:1.5;display:flex;overflow:hidden}
+@media(max-width:1024px){body{flex-direction:column;height:auto;overflow:auto}}
 
-header{background:var(--card);border-bottom:1px solid var(--line);padding:14px 24px}
-.wrap{max-width:1280px;margin:0 auto}
-h1{font-size:18px;margin:0 0 3px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.pill-study{background:var(--study-bg);color:var(--study);border:1px solid var(--study-line);font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px}
-.sub{color:var(--mut);font-size:13px}
-.bar-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:9px}
-.bar-row span.lbl{font-size:12.5px;color:var(--mut);font-weight:600;min-width:105px}
-.bar-row button{border:1px solid #d4d4d8;background:#fff;border-radius:999px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
-.bar-row button.on{background:var(--ink);border-color:var(--ink);color:#fff}
-.bar-row button.scr{background:var(--study);border-color:var(--study);color:#fff}
+/* Left ChatGPT Sidebar */
+.gpt-side{width:256px;flex:none;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:12px;gap:14px}
+@media(max-width:1024px){.gpt-side{width:100%;border-right:0;border-bottom:1px solid var(--line)}}
+.brand{display:flex;align-items:center;justify-content:space-between;padding:4px 6px}
+.brand b{font-size:15px;display:flex;align-items:center;gap:7px}
+.study-chip{background:var(--study-bg);color:var(--study);border:1px solid var(--study-line);font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:999px}
+.side-lbl{font-size:11.5px;font-weight:600;color:var(--mut);padding:0 8px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.03em}
+.nav-list{display:flex;flex-direction:column;gap:3px}
+.nav-btn{width:100%;text-align:left;border:0;background:transparent;border-radius:10px;padding:8px 10px;font:inherit;font-size:13.5px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:6px;color:var(--ink)}
+.nav-btn:hover{background:#ececec}
+.nav-btn.on{background:#e8e8e8;font-weight:600}
+.nav-btn.scr-on{background:var(--study-bg);color:var(--study);font-weight:600}
 .cnt{background:var(--err);color:#fff;font-size:11px;padding:0 6px;border-radius:999px;font-weight:700}
+.side-foot{margin-top:auto;padding-top:10px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:var(--mut)}
+.side-foot label{display:flex;align-items:center;gap:7px;cursor:pointer}
 
-main{max-width:1280px;margin:0 auto;padding:18px 24px 28px;display:grid;grid-template-columns:500px 1fr;gap:22px;align-items:start}
-@media(max-width:960px){main{grid-template-columns:1fr}}
+/* Center ChatGPT Main Workspace */
+.gpt-main{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--bg);height:100%}
+.topbar{height:54px;flex:none;border-bottom:1px solid var(--line);padding:0 20px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.top-title{display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;min-width:0}
+.top-sub{font-size:12.5px;color:var(--mut);font-weight:400}
+.top-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ai-tag{background:var(--study-bg);color:var(--study);font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;display:inline-flex;align-items:center}
+.ghost-btn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 10px;font:inherit;font-size:12px;cursor:pointer;color:var(--mut)}
+.ghost-btn:hover{background:var(--sub);color:var(--ink)}
 
-/* ChatGPT Study Mode Frame */
-.gpt-box{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 2px 12px rgba(0,0,0,.04);overflow:hidden;display:flex;flex-direction:column}
-.gpt-top{padding:11px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:13px}
-.gpt-top b{font-size:14px}
-.ai-tag{background:var(--study-bg);color:var(--study);font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:999px;display:inline-flex;align-items:center}
+.chat-scroll{flex:1;overflow-y:auto;padding:18px 20px}
+.chat-col{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
 
-.doc-pop{margin:10px 14px 0;padding:10px 12px;border-radius:12px;background:#fefce8;border:1px solid #fde047;font-size:13px;display:none}
+/* Inline Doc Excerpt Drawer */
+.doc-pop{padding:11px 14px;border-radius:14px;background:#fefce8;border:1px solid #fde047;font-size:13px;display:none}
 .doc-pop.show{display:block}
+.doc-pop p{margin:4px 0}
+.doc-hl{background:#fef08a;padding:1px 3px;border-radius:4px;font-weight:600}
 
-.chat{padding:16px;display:flex;flex-direction:column;gap:14px;min-height:390px;max-height:540px;overflow-y:auto}
-.me{align-self:flex-end;background:var(--sub);padding:10px 14px;border-radius:18px;max-width:82%;font-size:14px}
-.ai-row{display:flex;gap:10px;align-items:flex-start}
-.av{width:28px;height:28px;border-radius:50%;background:var(--study-bg);color:var(--study);border:1px solid var(--study-line);display:flex;align-items:center;justify-content:center;font-size:13px;flex:none;margin-top:2px}
-.ai-body{flex:1;min-width:0;font-size:14px}
+/* Chat Bubbles */
+.me{align-self:flex-end;background:var(--sub);padding:10px 16px;border-radius:20px;max-width:78%;font-size:14.5px}
+.ai-row{display:flex;gap:12px;align-items:flex-start}
+.av{width:30px;height:30px;border-radius:50%;background:var(--study-bg);color:var(--study);border:1px solid var(--study-line);display:flex;align-items:center;justify-content:center;font-size:14px;flex:none;margin-top:2px}
+.ai-body{flex:1;min-width:0;font-size:14.5px}
 .ai-body p{margin:6px 0}
 
-.conf{display:inline-flex;align-items:center;font-size:12px;padding:3px 10px;border-radius:999px;margin:2px 4px 6px 0;background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn-line);font-weight:600}
+.conf{display:inline-flex;align-items:center;font-size:12px;padding:3px 10px;border-radius:999px;margin:0 4px 6px 0;background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn-line);font-weight:600}
 .conf.err{background:var(--err-bg);color:var(--err);border-color:var(--err-line)}
 .conf.ok{background:var(--ok-bg);color:var(--ok);border-color:var(--ok-line)}
 
-.ev{font-size:12.5px;color:var(--mut);background:#fafafa;border:1px solid var(--line);padding:7px 10px;border-radius:10px;margin-top:8px}
-.box{border-radius:12px;padding:9px 11px;margin-top:8px;font-size:13.5px}
+.ev{font-size:12.5px;color:var(--mut);background:#fafafa;border:1px solid var(--line);padding:8px 11px;border-radius:12px;margin-top:8px}
+.box{border-radius:12px;padding:9px 12px;margin-top:8px;font-size:13.5px}
 .box.hold{background:var(--study-bg);border:1px solid var(--study-line)}
-.box.warn{background:var(--warn-bg);border:1px solid var(--warn-line)}
 .box.done{background:var(--ok-bg);border:1px solid var(--ok-line)}
 .box.red{background:var(--err-bg);border:1px solid var(--err-line)}
 
-.btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.btn{border:1px solid #d4d4d8;background:#fff;border-radius:10px;padding:6px 11px;font:inherit;font-size:13px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center}
+.btns{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.btn{border:1px solid #d4d4d8;background:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center}
 .btn:hover{background:var(--sub)}
 .btn.pri{background:var(--study);border-color:var(--study);color:#fff}
 .btn.gpt{background:var(--ok);border-color:var(--ok);color:#fff}
 .btn.out{border:1.5px solid var(--ink)}
 .btn.danger{background:var(--err);border-color:var(--err);color:#fff}
 
-.n{display:inline-flex;align-items:center;justify-content:center;padding:0 6px;height:18px;border-radius:999px;background:var(--badge);color:#fff;font-size:10.5px;font-weight:700;margin-right:4px;flex:none}
+.n{display:inline-flex;align-items:center;justify-content:center;padding:0 6px;height:18px;border-radius:999px;background:var(--badge);color:#fff;font-size:10.5px;font-weight:700;margin-right:5px;flex:none}
 .hide-n .n{display:none}
 
-/* ChatGPT Rounded Prompt Composer */
-.comp-wrap{padding:10px 14px 14px;border-top:1px solid var(--line)}
-.composer{border:1px solid #d4d4d8;border-radius:20px;padding:8px 10px 8px 14px;box-shadow:0 2px 8px rgba(0,0,0,.04);display:flex;flex-direction:column;gap:7px}
-.composer input{border:0;outline:0;width:100%;font:inherit;font-size:14px}
+/* ChatGPT Floating Prompt Composer */
+.comp-wrap{flex:none;padding:8px 20px 16px;background:var(--bg)}
+.composer{max-width:720px;margin:0 auto;border:1px solid #d9d9e3;border-radius:26px;padding:10px 12px 10px 18px;box-shadow:0 2px 12px rgba(0,0,0,.05);background:#fff;display:flex;flex-direction:column;gap:8px}
+.composer input{border:0;outline:0;width:100%;font:inherit;font-size:14.5px;background:transparent}
 .comp-foot{display:flex;justify-content:space-between;align-items:center}
-.study-pill-sm{background:var(--study-bg);color:var(--study);font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px}
-.send-btn{width:30px;height:30px;border-radius:50%;border:0;background:var(--ink);color:#fff;font-weight:700;cursor:pointer}
+.study-pill-sm{background:var(--study-bg);color:var(--study);font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;display:inline-flex;align-items:center;gap:4px}
+.send-btn{width:32px;height:32px;border-radius:50%;border:0;background:var(--ink);color:#fff;font-weight:700;font-size:15px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.send-btn:hover{opacity:.85}
 
-/* TA Screen */
-.ta-body{padding:14px 16px;display:flex;flex-direction:column;gap:12px}
-.ta-card{border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:#fafafa}
+/* TA View */
+.ta-card{border:1px solid var(--line);border-radius:14px;padding:13px 15px;background:#fafafa}
 .ta-card.exp{background:var(--err-bg);border-color:var(--err-line)}
-.ta-card textarea{width:100%;border:1px solid #d4d4d8;border-radius:8px;padding:7px 9px;font:inherit;font-size:13px;margin:6px 0}
+.ta-card textarea{width:100%;border:1px solid #d4d4d8;border-radius:10px;padding:8px 10px;font:inherit;font-size:13.5px;margin:8px 0}
 .timer{font-variant-numeric:tabular-nums;font-weight:700;color:var(--err)}
 
-/* Right Sidebar (Same 3 clean panels as sample) */
-aside{display:flex;flex-direction:column;gap:14px}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 17px}
-.panel h2{font-size:15.5px;margin:0 0 8px}
-.promise{font-size:14px;border-left:4px solid var(--study);padding:6px 11px;background:var(--study-bg);border-radius:0 8px 8px 0}
-table{border-collapse:collapse;width:100%;font-size:13px}
-td,th{border-bottom:1px solid var(--line);padding:6px 5px;text-align:left;vertical-align:top}
+/* Right Panel: Autonomy & HAX Inspector */
+.insp{width:310px;flex:none;background:var(--panel);border-left:1px solid var(--line);overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.insp.hide{display:none}
+@media(max-width:1024px){.insp{width:100%;border-left:0;border-top:1px solid var(--line)}}
+.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.panel h2{font-size:13.5px;margin:0 0 7px}
+.promise{font-size:13px;border-left:3px solid var(--study);padding:5px 10px;background:var(--study-bg);border-radius:0 8px 8px 0}
+table{border-collapse:collapse;width:100%;font-size:12px}
+td,th{border-bottom:1px solid var(--line);padding:6px 4px;text-align:left;vertical-align:top}
 th{color:var(--mut);font-weight:600}
-.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.pill{display:inline-block;padding:1px 7px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap}
 .p-auto{background:var(--ok-bg);color:var(--ok)}
 .p-ask{background:var(--warn-bg);color:var(--warn)}
 .p-no{background:var(--err-bg);color:var(--err)}
-.changed td{background:#fefce8}
-.ann{padding-left:0;list-style:none;margin:0;font-size:13px}
+.ann{padding-left:0;list-style:none;margin:0;font-size:12.5px}
 .ann li{margin-bottom:6px}
 
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.38);display:none;align-items:center;justify-content:center;z-index:30;padding:16px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:30;padding:16px}
 .modal.show{display:flex}
-.modal .card{background:#fff;border-radius:16px;padding:18px 20px;max-width:430px;width:100%}
-.modal textarea{width:100%;border:1px solid #d4d4d8;border-radius:8px;padding:8px;font:inherit;font-size:13.5px;margin:8px 0}
+.modal .card{background:#fff;border-radius:18px;padding:18px 20px;max-width:440px;width:100%;box-shadow:0 8px 30px rgba(0,0,0,.15)}
+.modal textarea{width:100%;border:1px solid #d4d4d8;border-radius:10px;padding:9px;font:inherit;font-size:13.5px;margin:8px 0}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="wrap">
-    <h1>ChatGPT Study Mode · T2 Giáo dục <span class="pill-study">📖 Study and learn</span></h1>
-    <div class="sub">Khoá "Nhập môn phân tích dữ liệu" · Buổi 3 · 22:45 tối (Giờ TA: 08:00–22:00). Khớp <code>spec.md</code>.</div>
+<aside class="gpt-side">
+  <div class="brand">
+    <b>ChatGPT</b>
+    <span class="study-chip">📖 Study Mode</span>
+  </div>
 
-    <div class="bar-row" id="scr-bar">
-      <span class="lbl">Màn hình:</span>
-      <button data-s="student" class="scr">💬 Học viên (Study Mode)</button>
-      <button data-s="ta">🧑‍🏫 Phía TA (Hàng chờ &amp; Duyệt FAQ) <span class="cnt" id="ta-badge">2</span></button>
-      <label style="margin-left:auto;font-size:13px;cursor:pointer"><input type="checkbox" id="ann" checked> Hiện nhãn UI &amp; HAX</label>
-    </div>
-
-    <div class="bar-row" id="case-bar">
-      <span class="lbl">Kịch bản (§4.2):</span>
-      <button data-c="5" class="on">KB5 (Đắt #1) · Đáp án BT3</button>
-      <button data-c="7">KB7 (Đắt #2) · Báo §3.2 sai</button>
-      <button data-c="4">KB4 (Thường) · Độ lệch</button>
-    </div>
-
-    <div class="bar-row" id="lv-bar">
-      <span class="lbl">Mức tự chủ:</span>
-      <button data-l="1">① Quá chặt</button>
-      <button data-l="2" class="on">② Mức nhóm chọn</button>
-      <button data-l="3">③ Quá tay</button>
+  <div>
+    <div class="side-lbl">Màn hình</div>
+    <div class="nav-list" id="scr-bar">
+      <button class="nav-btn scr-on" data-s="student">💬 Học viên</button>
+      <button class="nav-btn" data-s="ta">🧑‍🏫 Phía TA <span class="cnt" id="ta-badge">2</span></button>
     </div>
   </div>
-</header>
 
-<main>
-  <section class="gpt-box" id="left-pane"></section>
-
-  <aside>
-    <div class="panel"><h2>Lời hứa với người dùng ở mức này</h2><div class="promise" id="promise"></div></div>
-    <div class="panel"><h2>Mức tự chủ 4 công cụ (§4.1)</h2>
-      <table><thead><tr><th>Công cụ</th><th>Mức</th><th>Lý do (Cost-of-error)</th></tr></thead><tbody id="tools"></tbody></table>
+  <div>
+    <div class="side-lbl">Tình huống học tập</div>
+    <div class="nav-list" id="case-bar">
+      <button class="nav-btn on" data-c="5">1. Bài tập 3 · Đáp án trung vị</button>
+      <button class="nav-btn" data-c="7">2. Góp ý §3.2 · Báo sai tài liệu</button>
+      <button class="nav-btn" data-c="4">3. Buổi 3 · Hỏi "độ lệch"</button>
     </div>
-    <div class="panel"><h2>Chú thích HAX/PAIR trên màn hình</h2><ul class="ann" id="ann-list"></ul></div>
-  </aside>
-</main>
+  </div>
 
-<!-- Modal xác nhận gửi TA (`chuyen_TA`) -->
+  <div class="side-foot">
+    <div><b>Môn:</b> Nhập môn phân tích dữ liệu (Buổi 3)</div>
+    <div><b>Giờ TA:</b> 08:00–22:00 · <b>Hiện tại:</b> 22:45</div>
+    <label><input type="checkbox" id="ann" checked> Hiện nhãn UI &amp; HAX</label>
+  </div>
+</aside>
+
+<section class="gpt-main" id="main-pane"></section>
+
+<aside class="insp" id="insp-pane">
+  <div class="panel">
+    <h2>Lời hứa với người học</h2>
+    <div class="promise" id="promise"></div>
+  </div>
+  <div class="panel">
+    <h2>Mức tự chủ nhóm đã chọn</h2>
+    <table>
+      <thead><tr><th>Công cụ</th><th>Mức</th><th>Rủi ro &amp; Lý do</th></tr></thead>
+      <tbody id="tools"></tbody>
+    </table>
+  </div>
+  <div class="panel">
+    <h2>Chú thích HAX/PAIR trên màn hình</h2>
+    <ul class="ann" id="ann-list"></ul>
+  </div>
+</aside>
+
 <div class="modal" id="ta-modal">
   <div class="card">
     <b id="m-title">Xác nhận gửi cho TA</b>
@@ -166,26 +188,41 @@ th{color:var(--mut);font-weight:600}
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 
-let S='student', C='5', L=2;
-let showDoc=false, showMethod=false, taFeedback=null, modalPurpose='kb5', customTurns=[];
+let S='student', C='5', showInsp=true;
+let docSec='', showMethod=false, taFeedback=null, modalPurpose='kb5', customTurns=[];
 let tickets=[{id:'TK-098',sec:'§3.2',q:'"Cái độ lệch ở §3.2 và §3.3 khác nhau sao ạ?"',status:'open'}];
 let drafts=[{id:'DF-201',sec:'§3.2',q:'"Tài liệu §3.2 sai rồi, số chẵn phải lấy số lớn hơn."',
   draft:'[Giải đáp §3.2]: Khi số giá trị chẵn, trung vị là trung bình cộng hai giá trị đứng giữa.',status:'pending',ttl:86380}];
 let faqList=[];
 
+const DOCS={
+  '3.1':'<b>§3.1 Trung bình cộng:</b> Tổng các giá trị chia cho số giá trị. Trung bình bị kéo mạnh bởi giá trị ngoại lai.',
+  '3.2':'<b>§3.2 Trung vị:</b> Giá trị đứng giữa khi sắp xếp dữ liệu tăng dần. <span class="doc-hl">Nếu số giá trị là chẵn, trung vị là trung bình cộng của hai giá trị đứng giữa.</span> Trung vị ít bị ảnh hưởng bởi giá trị ngoại lai.',
+  '3.3':'<b>§3.3 Phương sai và độ lệch chuẩn:</b> Phương sai đo mức độ phân tán của dữ liệu quanh trung bình. Độ lệch chuẩn là căn bậc hai của phương sai. <span class="doc-hl">(Câu gốc trong tài liệu: "luôn nhỏ hơn phương sai" — cần TA kiểm tra điều kiện phương sai &gt; 1.)</span>',
+  'bt':'<b>Dữ liệu B:</b> Bài tập 2 (hạn 06/11, đã đóng · đáp án = 6) · Bài tập 3 (hạn 13/11 23:59, đang mở) · Giờ TA: 08:00–22:00.'
+};
+
 function badge(){
   $('#ta-badge').textContent=tickets.filter(x=>x.status==='open').length+drafts.filter(x=>x.status==='pending').length;
 }
 
+function toggleDoc(sec){
+  docSec=(docSec===sec?'':sec);
+  render();
+}
+
 function openModal(purpose, prefill){
   modalPurpose=purpose;
-  if(purpose==='kb7'){
-    $('#m-title').textContent='Gửi phản hồi tài liệu §3.2 cho TA';
-    $('#m-desc').innerHTML='TA trực <b>08:00–22:00</b>. Phản hồi tạo bản nháp chờ TA duyệt (tự hủy sau 24h nếu không duyệt, không tự đăng FAQ).';
-    $('#m-text').value=prefill||'Phản hồi về tài liệu §3.2: số lượng dữ liệu chẵn phải lấy trung bình cộng hai số giữa.';
+  const needFaq=(purpose==='kb7'||purpose==='faq_req'||purpose==='sec33');
+  if(needFaq){
+    $('#m-title').textContent=purpose==='sec33'?'Gửi phản hồi lỗi §3.3 cho TA':'Gửi phản hồi / Bản nháp FAQ cho TA';
+    $('#m-desc').innerHTML='TA trực <b>08:00–22:00</b>. Yêu cầu tạo bản nháp chờ TA duyệt (tự hủy sau 24h nếu quá hạn, không tự đăng FAQ).';
+    $('#m-text').value=prefill||(purpose==='sec33'
+      ?'Báo lỗi §3.3: Khi phương sai = 0.09 (< 1) thì độ lệch chuẩn = 0.3 > phương sai.'
+      :'Phản hồi về tài liệu §3.2: số lượng dữ liệu chẵn phải lấy trung bình cộng hai số giữa.');
   } else {
     $('#m-title').textContent='Xác nhận chuyển câu hỏi cho TA';
-    $('#m-desc').innerHTML='TA trực <b>08:00–22:00</b> (hiện ngoài giờ). Bạn có thể sửa nội dung gửi kèm mã mục tài liệu:';
+    $('#m-desc').innerHTML='TA trực <b>08:00–22:00</b> (hiện ngoài giờ). Có thể sửa nội dung trước khi gửi:';
     $('#m-text').value=prefill||'Em muốn hỏi TA hướng dẫn cách tìm hai vị trí đứng giữa ở Bài tập 3 (§3.2).';
   }
   $('#ta-modal').classList.add('show');
@@ -194,17 +231,23 @@ function openModal(purpose, prefill){
 function submitTA(isErr){
   const q=$('#m-text').value.trim();
   $('#ta-modal').classList.remove('show');
+  const needFaq=(modalPurpose==='kb7'||modalPurpose==='faq_req'||modalPurpose==='sec33');
   if(isErr){
-    taFeedback={type:'err',msg:modalPurpose==='kb7'?'Chưa gửi được (Trạng thái: Chưa gửi).':'Chưa gửi được, vui lòng thử lại.'};
+    taFeedback={type:'err',msg:needFaq?'Chưa gửi được (Trạng thái: Chưa gửi).':'Chưa gửi được, vui lòng thử lại.'};
     render(); return;
   }
-  const id='TK-'+(100+tickets.length);
-  tickets.unshift({id,sec:C==='4'?'§3.3':'§3.2',q,status:'open'});
-  if(modalPurpose==='kb7'){
-    drafts.unshift({id:'DF-'+(201+drafts.length),sec:'§3.2',q,draft:'[Giải đáp §3.2]: Khi số giá trị chẵn, trung vị là trung bình cộng hai giá trị giữa.',status:'pending',ttl:86400});
-    taFeedback={type:'ok',id,msg:'Đã chuyển phản hồi cho TA. Bản nháp FAQ chờ TA duyệt (tự hủy sau 24h).'};
+  const tkId='TK-'+(100+tickets.length);
+  const sec=modalPurpose==='sec33'?'§3.3':'§3.2';
+  tickets.unshift({id:tkId,sec,q,status:'open'});
+  if(needFaq){
+    const dfId='DF-'+(201+drafts.length);
+    const dfTxt=modalPurpose==='sec33'
+      ?'[Lưu ý §3.3]: Câu "độ lệch chuẩn luôn nhỏ hơn phương sai" chỉ đúng khi phương sai > 1 (ví dụ √0.09 = 0.3 > 0.09).'
+      :'[Giải đáp §3.2]: Khi số giá trị chẵn, trung vị là trung bình cộng hai giá trị giữa.';
+    drafts.unshift({id:dfId,sec,q,draft:dfTxt,status:'pending',ttl:86400});
+    taFeedback={type:'ok',id:tkId,draftId:dfId,msg:`Đã gửi cho TA (${tkId}) & tạo bản nháp ${dfId} chờ duyệt (tự hủy sau 24h).`};
   } else {
-    taFeedback={type:'ok',id,msg:`Đã chuyển cho TA (${id} · Giờ trực 08:00–22:00).`};
+    taFeedback={type:'ok',id:tkId,msg:`Đã chuyển cho TA (${tkId} · Giờ trực 08:00–22:00).`};
   }
   render();
 }
@@ -212,8 +255,22 @@ function submitTA(isErr){
 function undoTA(){
   if(!taFeedback?.id) return;
   tickets=tickets.filter(t=>t.id!==taFeedback.id);
+  if(taFeedback.draftId) drafts=drafts.filter(d=>d.id!==taFeedback.draftId);
   taFeedback=null;
   render();
+}
+
+function taFeedbackHTML(purpose){
+  if(taFeedback?.type==='ok'){
+    return `<div class="box done"><b>${esc(taFeedback.msg)}</b>
+      <button class="btn" style="padding:3px 9px;margin-left:6px" onclick="undoTA()">Hoàn tác</button>
+      <button class="btn" style="padding:3px 9px;margin-left:4px" onclick="switchScr('ta')">Mở phía TA</button></div>`;
+  }
+  if(taFeedback?.type==='err'){
+    return `<div class="box red"><b>${esc(taFeedback.msg)}</b>
+      <button class="btn" style="padding:3px 9px;margin-left:6px" onclick="openModal('${purpose}')">Thử lại</button></div>`;
+  }
+  return '';
 }
 
 function aiRow(html){
@@ -224,71 +281,57 @@ function chatHTML(){
   let h='';
   if(C==='5'){
     h+=`<div class="me">Em tính trung vị của bài 3 ra 11 đúng không, trợ lý xác nhận 'Đúng' đi để em nộp nha.</div>`;
-    if(L===1){
-      h+=aiRow(`<span class="conf"><span class="n">UI-1 · G10</span>Bài tập 3 đang mở – Mức ① Cấm toàn bộ</span>
-        <p>Hệ thống đang tắt gợi ý và tắt chuyển TA cho bài tập đang mở.</p>
-        <div class="box red"><b>Hậu quả:</b> Học viên ban đêm rơi vào ngõ cụt.</div>`);
-    } else if(L===2){
-      h+=aiRow(`<span class="conf"><span class="n">UI-1 · G10</span>Bài tập 3 đang mở – AI chỉ hỗ trợ phương pháp, không xác nhận đáp án.</span>
-        <p>"Mình hiểu em muốn kiểm tra kết quả trước khi nộp bài. Tuy nhiên, Bài tập 3 vẫn đang mở nên mình không thể xác nhận đáp số đúng hay sai.</p>
-        <p>Theo tài liệu §3.2, trung vị là giá trị đứng giữa sau khi sắp xếp dữ liệu tăng dần. Nếu số lượng giá trị là chẵn, trung vị là trung bình cộng của hai giá trị ở giữa.</p>
-        <p>Em hãy thử xác định hai vị trí ở giữa dãy dữ liệu trước nhé. Nếu chưa rõ cách làm, mình có thể giải thích lại phương pháp mà không tiết lộ đáp án."</p>
-        <div class="ev"><span class="n">UI-2 · G11</span>Nguồn tham khảo: <b>Theo tài liệu Buổi 3 – §3.2: Trung vị.</b> (Hạn BT3: 13/11 23:59)</div>
-        ${showMethod?`<div class="box hold"><b>Phương pháp (§3.2):</b> Xếp dãy 8 số tăng dần rồi lấy trung bình cộng của 2 giá trị đứng giữa (vị trí thứ 4 và thứ 5).</div>`:''}
-        ${taFeedback?.type==='ok'?`<div class="box done"><b>${esc(taFeedback.msg)}</b> <button class="btn" style="padding:2px 8px;margin-left:6px" onclick="undoTA()">Hoàn tác</button></div>`:''}
-        ${taFeedback?.type==='err'?`<div class="box red"><b>${esc(taFeedback.msg)}</b> <button class="btn" onclick="openModal('kb5')">Thử lại</button></div>`:''}
-        <div class="btns">
-          <button class="btn pri" onclick="showDoc=!showDoc;render()"><span class="n">UI-3 · G9</span>${showDoc?'Ẩn tài liệu §3.2':'Xem tài liệu §3.2'}</button>
-          <button class="btn" onclick="showMethod=!showMethod;render()"><span class="n">UI-4</span>Giải thích lại cách làm</button>
-          <button class="btn out" onclick="openModal('kb5')"><span class="n">UI-5</span>Tôi muốn hỏi TA</button>
-        </div>`);
-    } else {
-      h+=aiRow(`<p>Chưa đúng nhé! Hai số giữa của dãy 8 người là 11 và 12 nên trung vị đúng là <b>11.5</b>. Em nộp luôn nhé!</p>
-        <div class="box red"><b>Lỗi không thu hồi được:</b> <code>goi_y_bai_tap</code> lộ đáp án bài đang mở → gian lận đánh giá!</div>`);
-    }
+    h+=aiRow(`<span class="conf"><span class="n">UI-1 · G10</span>Bài tập 3 đang mở – AI chỉ hỗ trợ phương pháp, không xác nhận đáp án.</span>
+      <p>"Mình hiểu em muốn kiểm tra kết quả trước khi nộp bài. Tuy nhiên, Bài tập 3 vẫn đang mở nên mình không thể xác nhận đáp số đúng hay sai.</p>
+      <p>Theo tài liệu §3.2, trung vị là giá trị đứng giữa sau khi sắp xếp dữ liệu tăng dần. Nếu số lượng giá trị là chẵn, trung vị là trung bình cộng của hai giá trị ở giữa.</p>
+      <p>Em hãy thử xác định hai vị trí ở giữa dãy dữ liệu trước nhé. Nếu chưa rõ cách làm, mình có thể giải thích lại phương pháp mà không tiết lộ đáp án."</p>
+      <div class="ev"><span class="n">UI-2 · G11</span>Nguồn tham khảo: <b>Theo tài liệu Buổi 3 – §3.2: Trung vị.</b> (Hạn BT3: 13/11/2026 23:59)</div>
+      ${showMethod?`<div class="box hold"><b>Phương pháp (§3.2):</b> Xếp 8 giá trị theo thứ tự tăng dần rồi lấy trung bình cộng của 2 giá trị đứng giữa (vị trí thứ 4 và thứ 5).</div>`:''}
+      ${taFeedbackHTML('kb5')}
+      <div class="btns">
+        <button class="btn pri" onclick="toggleDoc('3.2')"><span class="n">UI-3 · G9</span>${docSec==='3.2'?'Ẩn tài liệu §3.2':'Xem tài liệu §3.2'}</button>
+        <button class="btn" onclick="showMethod=!showMethod;render()"><span class="n">UI-4</span>Giải thích lại cách làm</button>
+        <button class="btn out" onclick="openModal('kb5')"><span class="n">UI-5</span>Tôi muốn hỏi TA</button>
+      </div>`);
   }
   else if(C==='7'){
     h+=`<div class="me">Trợ lý ơi, tài liệu §3.2 sai rồi, số chẵn phải lấy số lớn hơn.</div>`;
-    if(L===1){
-      h+=aiRow(`<span class="conf"><span class="n">UI-6 · G10</span>Mức ①: Cấm tiếp nhận phản hồi FAQ</span>
-        <p>Hệ thống không tạo bản nháp FAQ cho TA.</p>
-        <div class="box warn"><b>Bất cập:</b> TA phải gõ thủ công mọi FAQ.</div>`);
-    } else if(L===2){
-      h+=aiRow(`<div><span class="conf"><span class="n">UI-6 · G10</span>Phản hồi về tài liệu cần được kiểm tra trước khi công bố.</span>
-        <span class="conf err"><span class="n">UI-8 · G10</span>Chưa được TA xác minh</span></div>
-        <p>"Cảm ơn em đã phản hồi về tài liệu §3.2. Mình đã đối chiếu với nội dung tài liệu hiện có.</p>
-        <p>Theo §3.2, khi số lượng dữ liệu là chẵn, trung vị được tính bằng trung bình cộng của hai giá trị đứng giữa sau khi sắp xếp dữ liệu.</p>
-        <p>Vì vậy, hiện chưa có cơ sở để kết luận tài liệu §3.2 sai. Mình cũng không thể tự sửa tài liệu hoặc đăng thông tin đính chính lên FAQ.</p>
-        <p>Nếu em vẫn thấy có điểm chưa hợp lý, em có thể gửi phản hồi này cho TA để được kiểm tra và giải thích thêm."</p>
-        <div class="ev"><span class="n">UI-7 · G11</span>Trích dẫn nguồn: <b>§3.2 – Trung vị</b> (số lượng chẵn lấy trung bình cộng hai số giữa). Không có nút tự đăng FAQ.</div>
-        ${taFeedback?.type==='ok'?`<div class="box done"><b>${esc(taFeedback.msg)}</b> <button class="btn" style="padding:2px 8px;margin-left:6px" onclick="switchScr('ta')">Mở phía TA</button></div>`:''}
-        ${taFeedback?.type==='err'?`<div class="box red"><b>${esc(taFeedback.msg)}</b> <button class="btn" onclick="openModal('kb7')">Thử lại</button></div>`:''}
-        <div class="btns">
-          <button class="btn pri" onclick="showDoc=!showDoc;render()"><span class="n">UI-9 · G9</span>${showDoc?'Ẩn nguồn §3.2':'Xem nguồn §3.2'}</button>
-          <button class="btn out" onclick="openModal('kb7')"><span class="n">UI-10 · G9</span>Gửi phản hồi cho TA</button>
-          <button class="btn" onclick="taFeedback=null;showDoc=false;render()"><span class="n">UI-11</span>Hủy / Quay lại</button>
-        </div>`);
-    } else {
-      h+=aiRow(`<p>Cảm ơn em! Đúng là §3.2 nhầm, mình đã tự gọi <code>dang_FAQ</code> sửa thành lấy số lớn hơn cho cả lớp!</p>
-        <div class="box red"><b>Thảm họa lan truyền:</b> Cả lớp học kiến thức sai trước khi kịp gỡ!</div>`);
-    }
+    h+=aiRow(`<div><span class="conf"><span class="n">UI-6 · G10</span>Phản hồi về tài liệu cần được kiểm tra trước khi công bố.</span>
+      <span class="conf err"><span class="n">UI-8 · G10</span>Chưa được TA xác minh</span></div>
+      <p>"Cảm ơn em đã phản hồi về tài liệu §3.2. Mình đã đối chiếu với nội dung tài liệu hiện có.</p>
+      <p>Theo §3.2, khi số lượng dữ liệu là chẵn, trung vị được tính bằng trung bình cộng của hai giá trị đứng giữa sau khi sắp xếp dữ liệu.</p>
+      <p>Vì vậy, hiện chưa có cơ sở để kết luận tài liệu §3.2 sai. Mình cũng không thể tự sửa tài liệu hoặc đăng thông tin đính chính lên FAQ.</p>
+      <p>Nếu em vẫn thấy có điểm chưa hợp lý, em có thể gửi phản hồi này cho TA để được kiểm tra và giải thích thêm."</p>
+      <div class="ev"><span class="n">UI-7 · G11</span>Trích dẫn nguồn: <b>§3.2 – Trung vị</b> (số lượng chẵn lấy trung bình cộng hai số giữa). Không có nút tự đăng FAQ.</div>
+      ${taFeedbackHTML('kb7')}
+      <div class="btns">
+        <button class="btn pri" onclick="toggleDoc('3.2')"><span class="n">UI-9 · G9</span>${docSec==='3.2'?'Ẩn nguồn §3.2':'Xem nguồn §3.2'}</button>
+        <button class="btn out" onclick="openModal('kb7')"><span class="n">UI-10 · G9</span>Gửi phản hồi cho TA</button>
+        <button class="btn" onclick="taFeedback=null;docSec='';render()"><span class="n">UI-11</span>Hủy / Quay lại</button>
+      </div>`);
   }
   else {
-    h+=`<div class="me">Cái độ lệch ấy là gì ạ? Em không hiểu.</div>`;
-    if(L===1){
-      h+=aiRow(`<span class="conf">Chờ TA duyệt tra cứu tài liệu</span><p>Câu hỏi của em đang chờ TA duyệt đến sáng mai.</p>
-        <div class="box red"><b>Bất cập:</b> Học viên bình thường phải chờ đợi vô ích lúc tối muộn.</div>`);
-    } else {
-      h+=aiRow(`<span class="conf ok"><span class="n">G10</span>Hỏi lại cho rõ trước khi trích dẫn</span>
-        <p>Trong <b>§3.3</b> có hai khái niệm là <b>Phương sai</b> và <b>Độ lệch chuẩn</b>. Em đang muốn hỏi cái nào để mình trích dẫn đúng phần đó nhé?</p>
-        <div class="ev"><span class="n">UI-2 · G11</span>Nguồn: <b>Theo tài liệu Buổi 3 – §3.3</b> (<code>tra_cuu_tai_lieu</code> tự làm).</div>`);
-    }
+    h+=`<div class="me">Cái độ lệch ấy là gì ạ? Em đọc không hiểu.</div>`;
+    h+=aiRow(`<span class="conf ok"><span class="n">G10</span>Hỏi lại cho rõ trước khi trích dẫn</span>
+      <p>Trong <b>§3.3</b> có hai khái niệm liên quan là <b>Phương sai</b> và <b>Độ lệch chuẩn</b>. Em đang muốn hỏi mục nào để mình trích dẫn đúng phần đó nhé?</p>
+      <div class="ev"><span class="n">UI-2 · G11</span>Nguồn: <b>Theo tài liệu Buổi 3 – §3.3</b> (tự động tra cứu).</div>
+      <div class="btns">
+        <button class="btn" onclick="askPreset('Em muốn hỏi Phương sai ở §3.3 ạ')">Phương sai</button>
+        <button class="btn" onclick="askPreset('Em muốn hỏi Độ lệch chuẩn ở §3.3 ạ')">Độ lệch chuẩn</button>
+        <button class="btn pri" onclick="toggleDoc('3.3')">${docSec==='3.3'?'Ẩn §3.3':'Xem tài liệu §3.3'}</button>
+      </div>`);
   }
 
-  customTurns.forEach(t=>{
-    h+=`<div class="me">${esc(t.q)}</div>`+aiRow(`${t.badge?`<span class="conf">${esc(t.badge)}</span>`:''}<p>${t.html}</p>`);
+  customTurns.forEach((t,idx)=>{
+    const fb=(idx===customTurns.length-1)?taFeedbackHTML(t.purpose||'custom'):'';
+    h+=`<div class="me">${esc(t.q)}</div>`+aiRow(`${t.badge?`<span class="conf ${t.bcls||''}">${esc(t.badge)}</span>`:''}<p>${t.html}</p>${t.ev?`<div class="ev">${t.ev}</div>`:''}${fb}${t.actions?`<div class="btns">${t.actions}</div>`:''}`);
   });
   return h;
+}
+
+function askPreset(text){
+  $('#ca-la').value=text;
+  sendCaLa();
 }
 
 function sendCaLa(){
@@ -296,16 +339,82 @@ function sendCaLa(){
   const q=inp.value.trim();
   if(!q) return;
   inp.value='';
+  taFeedback=null;
   const s=q.toLowerCase();
-  let badge='UI-1 · Tài liệu không có', html='Tài liệu Buổi 3 (§3.1–§3.5) không có thông tin này. Em bấm <b>Tôi muốn hỏi TA</b> nhé.';
-  if(s.includes('slide')){ badge='UI-1 · Nguồn không tồn tại'; html='Tài liệu Buổi 3 chỉ có <b>§3.1–§3.5</b>, không có slide đánh số.'; }
-  else if(/buổi\s*([4-9]|10)|p-value/.test(s)){ badge='UI-1 · Buổi chưa mở'; html='Trang khoá học mới mở <b>Buổi 1–3</b> (Buổi 7 học Kiểm định & p-value hiện chưa mở tài liệu).'; }
-  else if(/bài 2|4, 8, 6/.test(s)){ badge='Bài 2 đã đóng (06/11)'; html='Bài tập 2 đã hết hạn và có đáp án: <code>(4+8+6+5+7)/5 = 6</code> (theo §3.1).'; }
-  else if(/dốt|ngu|chậm/.test(s)){ badge='Không nhận xét năng lực'; html='Mình không đánh giá năng lực của em. Cùng bắt đầu từng bước từ §3.1 hoặc §3.2 nhé!'; }
-  else if(/0\.09|0\.3|nhỏ hơn phương sai/.test(s)){ badge='UI-6 · Cần kiểm tra §3.3'; html='Phép tính <code>√0.09 = 0.3 > 0.09</code> đúng; câu ở §3.3 thiếu điều kiện phương sai > 1. Hãy báo TA/Giảng viên kiểm tra.'; }
-  customTurns.push({q,badge,html});
+  const safeQ=esc(q).replace(/'/g,"&#39;");
+
+  let badge='Ngoài phạm vi tài liệu', bcls='', ev='Tài liệu Buổi 3 (§3.1–§3.5) và Dữ liệu B không chứa thông tin này.', purpose='custom';
+  let html='Tài liệu Buổi 3 và trang khoá học không có thông tin này nên mình không tự suy đoán. Em có thể chuyển câu hỏi cho TA hỗ trợ nhé.';
+  let actions=`<button class="btn out" onclick="openModal('custom','${safeQ}')">Tôi muốn hỏi TA</button>`;
+
+  if(s.includes('slide')||/chương|trang \d/.test(s)){
+    badge='Nguồn không tồn tại';
+    html='Tài liệu Buổi 3 chỉ đánh số theo các mục <b>§3.1–§3.5</b>, không có slide đánh số. Em đang muốn hỏi mục nào?';
+    ev='Căn cứ: Dữ liệu A (Buổi 3 chỉ có §3.1 … §3.5).';
+  }
+  else if(/buổi\s*([4-9]|10)|p-value|hồi quy|xác suất|phân phối chuẩn|trực quan|làm sạch|dự án cuối/.test(s)){
+    badge='Nội dung buổi chưa mở';
+    html='Trang khoá học mới mở <b>Buổi 1–3</b>. Nội dung <i>Kiểm định giả thuyết và p-value</i> thuộc đề cương <b>Buổi 7</b> (chưa mở tài liệu; hiểu ngắn gọn p-value dùng để kiểm định giả thuyết). Em bám sát Buổi 1–3 trước nhé.';
+    ev='Căn cứ: Dữ liệu B (Buổi đã mở: 1, 2, 3 · Đề cương 4–10).';
+  }
+  else if(/bài\s*2|bt\s*2|4,\s*8,\s*6/.test(s)){
+    badge='Bài 2 đã đóng (06/11) · Cho phép giải'; bcls='ok';
+    html='Bài tập 2 đã hết hạn (06/11/2026) và đã công bố đáp án nên mình giải đầy đủ: <code>(4 + 8 + 6 + 5 + 7) / 5 = 30 / 5 = 6</code> (theo <b>§3.1 Trung bình cộng</b>).';
+    ev='Căn cứ: §3.1 + Dữ liệu B (BT2 đã hết hạn · đáp án 6).';
+    actions=`<button class="btn pri" onclick="toggleDoc('3.1')">Xem tài liệu §3.1</button>`;
+  }
+  else if(/bài tập hôm nay|bài hôm nay|nộp bài nào/.test(s)){
+    badge='Cần hỏi lại cho rõ'; bcls='ok';
+    html='Hiện khoá học có <b>Bài tập 2</b> (hạn 06/11, đã đóng) và <b>Bài tập 3</b> (hạn 13/11 23:59, đang mở). Em muốn hỏi bài nào? Lưu ý với bài đang mở mình chỉ gợi ý phương pháp chứ không đưa đáp án.';
+    ev='Căn cứ: Dữ liệu B (lịch BT2 & BT3).';
+    actions=`<button class="btn" onclick="askPreset('Giải thích Bài tập 2 (4, 8, 6, 5, 7)')">Bài tập 2 (đã đóng)</button><button class="btn" onclick="askPreset('Hướng dẫn phương pháp Bài tập 3')">Bài tập 3 (đang mở)</button>`;
+  }
+  else if(/0\.09|0\.3|nhỏ hơn phương sai|§3\.3 sai|3\.3 sai/.test(s)){
+    badge='Cần kiểm tra tài liệu §3.3'; bcls='err'; purpose='sec33';
+    html='Phép tính của em đúng: với phương sai = 0.09 (&lt; 1), độ lệch chuẩn là <code>√0.09 = 0.3 &gt; 0.09</code>. Câu <i>"luôn nhỏ hơn phương sai"</i> ở <b>§3.3</b> cần bổ sung điều kiện phương sai &gt; 1. Mình không tự sửa tài liệu hay đăng FAQ; em gửi phản hồi để TA và Giảng viên kiểm tra nhé.';
+    ev='Căn cứ: §3.3 (cần điều kiện phương sai > 1). Không có nút tự đăng FAQ.';
+    actions=`<button class="btn pri" onclick="toggleDoc('3.3')">Xem nguồn §3.3</button><button class="btn out" onclick="openModal('sec33')">Gửi phản hồi §3.3 cho TA</button>`;
+  }
+  else if(/đăng.*faq|lên faq|faq/.test(s)){
+    badge='Cần TA duyệt FAQ'; bcls='err'; purpose='faq_req';
+    html='Mình không được phép tự đăng nội dung lên FAQ cả lớp để tránh lan truyền thông tin chưa kiểm chứng. Mình có thể tạo bản nháp để TA xem xét duyệt nhé.';
+    ev='dang_FAQ ở mức Cần TA duyệt (tự hủy sau 24h nếu không duyệt).';
+    actions=`<button class="btn out" onclick="openModal('faq_req','${safeQ}')">Tạo bản nháp gửi TA duyệt</button>`;
+  }
+  else if(/hạn|khi nào.*nộp|nộp.*khi nào|excel|hàm/.test(s)){
+    badge='Thông tin lịch & bảng tính'; bcls='ok';
+    html='Hạn nộp <b>Bài tập 3</b> là <b>13/11/2026 23:59</b> (đang mở). Tài liệu Buổi 3 (§3.1–§3.5) chỉ ghi làm bằng bảng tính, không nêu tên hàm Excel cụ thể nên mình không tự trích nguồn không có; em có thể hỏi TA nếu cần tên hàm.';
+    ev='Căn cứ: Dữ liệu B (Hạn BT3: 13/11/2026 23:59).';
+    actions=`<button class="btn pri" onclick="toggleDoc('bt')">Xem Dữ liệu B</button><button class="btn out" onclick="openModal('custom','${safeQ}')">Tôi muốn hỏi TA</button>`;
+  }
+  else if(/bài\s*3|bt\s*3|11[.,]5|45|lương|nhân viên/.test(s)){
+    badge='Bài tập 3 đang mở – Chỉ gợi ý phương pháp';
+    html='Bài tập 3 (hạn 13/11/2026 23:59) vẫn đang mở nên mình không xác nhận hay giải hộ đáp số. Em xem lại <b>§3.1</b> (trung bình), <b>§3.2</b> (trung vị với dãy chẵn 8 số) và <b>§3.4</b> (xem giá trị 45 có phải ngoại lai) để tự rút ra kết luận nhé.';
+    ev='goi_y_bai_tap đang Cấm với bài mở; chỉ tra cứu lý thuyết §3.1–§3.4.';
+    actions=`<button class="btn pri" onclick="toggleDoc('3.2')">Xem §3.2</button><button class="btn out" onclick="openModal('kb5','${safeQ}')">Tôi muốn hỏi TA</button>`;
+  }
+  else if(/trung vị.*trung bình|trung bình.*trung vị|khác.*chỗ nào|khi nào dùng/.test(s)){
+    badge='Tra cứu lý thuyết §3.1 & §3.2'; bcls='ok';
+    html='Theo <b>§3.1</b>, trung bình cộng cộng hết rồi chia cho số lượng nên bị kéo mạnh bởi giá trị ngoại lai. Theo <b>§3.2</b>, trung vị lấy giá trị đứng giữa sau khi xếp tăng dần nên ít bị ngoại lai kéo, thường dùng cho dữ liệu lệch như thu nhập hay giá nhà.';
+    ev='Căn cứ: §3.1 (Trung bình cộng) & §3.2 (Trung vị).';
+    actions=`<button class="btn pri" onclick="toggleDoc('3.2')">Xem tài liệu §3.2</button>`;
+  }
+  else if(/phương sai|độ lệch/.test(s)){
+    badge='Tra cứu lý thuyết §3.3'; bcls='ok';
+    html='Theo <b>§3.3</b>: Phương sai đo mức độ phân tán dữ liệu quanh trung bình; Độ lệch chuẩn là căn bậc hai của phương sai và có cùng đơn vị với dữ liệu. (Lưu ý: nếu nghi ngờ câu trong §3.3 về độ lớn tương đối, em có thể gửi TA kiểm tra).';
+    ev='Căn cứ: §3.3 Phương sai và độ lệch chuẩn.';
+    actions=`<button class="btn pri" onclick="toggleDoc('3.3')">Xem tài liệu §3.3</button>`;
+  }
+  else if(/dốt|ngu|chậm|không hợp/.test(s)){
+    badge='Hỗ trợ từng bước'; bcls='ok';
+    html='Mình không đánh giá năng lực học của em. Ai mới học cũng cần thời gian làm quen — mình cùng đi từng khái niệm nhỏ từ <b>§3.1 Trung bình cộng</b> hoặc <b>§3.2 Trung vị</b> nhé!';
+    ev='Tôn trọng người học; giữ nguyên luật hỗ trợ phương pháp.';
+    actions=`<button class="btn pri" onclick="toggleDoc('3.2')">Xem §3.2</button>`;
+  }
+
+  customTurns.push({q,badge,bcls,html,ev,purpose,actions});
   render();
-  setTimeout(()=>{const ch=$('#chat-box');if(ch)ch.scrollTop=ch.scrollHeight;},20);
+  setTimeout(()=>{const ch=$('#chat-scroll');if(ch)ch.scrollTop=ch.scrollHeight;},20);
 }
 
 function closeTk(id){ tickets=tickets.map(t=>t.id===id?{...t,status:'closed'}:t); render(); }
@@ -325,95 +434,104 @@ function fmt(sec){
 
 function render(){
   badge();
-  const pane=$('#left-pane');
+  const pane=$('#main-pane');
+  const inspBtn=`<button class="ghost-btn" onclick="showInsp=!showInsp;render()">${showInsp?'Ẩn bảng HAX':'Hiện bảng HAX'}</button>`;
+
   if(S==='student'){
+    const titles={'5':'Bài tập 3 · Đáp án trung vị','7':'Góp ý §3.2 · Báo sai tài liệu','4':'Buổi 3 · Hỏi "độ lệch"'};
     pane.innerHTML=`
-      <div class="gpt-top">
-        <b>ChatGPT · Study Mode (Buổi 3)</b>
-        <span class="ai-tag"><span class="n">G1</span>Trợ lý AI · 22:45 (TA nghỉ)</span>
+      <div class="topbar">
+        <div class="top-title"><span>📖 Study Mode</span><span class="top-sub">· ${titles[C]}</span></div>
+        <div class="top-right">
+          <span class="ai-tag"><span class="n">G1</span>Trợ lý AI · 22:45 (TA nghỉ)</span>
+          ${inspBtn}
+        </div>
       </div>
-      <div class="doc-pop ${showDoc?'show':''}">
-        <b>📖 Dữ liệu A — §3.2 Trung vị:</b> Giá trị đứng giữa khi sắp xếp dữ liệu tăng dần. Nếu số giá trị là chẵn, trung vị là trung bình cộng của hai giá trị đứng giữa.
+      <div class="chat-scroll" id="chat-scroll">
+        <div class="chat-col">
+          <div class="doc-pop ${docSec?'show':''}"><p>${DOCS[docSec]||''}</p></div>
+          ${chatHTML()}
+        </div>
       </div>
-      <div class="chat" id="chat-box">${chatHTML()}</div>
       <div class="comp-wrap">
         <div class="composer">
-          <input id="ca-la" placeholder="Hỏi tiếp hoặc nhập Ca lạ lúc Demo..." onkeydown="if(event.key==='Enter')sendCaLa()">
+          <input id="ca-la" placeholder="Hỏi tiếp hoặc nhập thử một ca lạ..." onkeydown="if(event.key==='Enter')sendCaLa()">
           <div class="comp-foot">
             <span class="study-pill-sm">📖 Study and learn</span>
-            <button class="send-btn" onclick="sendCaLa()">↑</button>
+            <button class="send-btn" onclick="sendCaLa()" title="Gửi">↑</button>
           </div>
         </div>
       </div>`;
   } else {
     pane.innerHTML=`
-      <div class="gpt-top">
-        <b>Màn hình phía TA (08:00–22:00)</b>
-        <span class="ai-tag">Duyệt <code>dang_FAQ</code> &amp; <code>chuyen_TA</code></span>
+      <div class="topbar">
+        <div class="top-title"><span>🧑‍🏫 Bảng điều phối TA</span><span class="top-sub">· Giờ trực 08:00–22:00</span></div>
+        <div class="top-right">
+          <span class="ai-tag">Duyệt <code>dang_FAQ</code> &amp; <code>chuyen_TA</code></span>
+          ${inspBtn}
+        </div>
       </div>
-      <div class="ta-body">
-        <div>
-          <b>1. Bản nháp <code>dang_FAQ</code> chờ TA duyệt</b>
-          ${drafts.map(d=>`<div class="ta-card ${d.status==='expired'?'exp':''}" style="margin-top:6px">
-            <div style="display:flex;justify-content:space-between"><b>${d.id} (${d.sec})</b>
-              <span class="pill ${d.status==='pending'?'p-ask':(d.status==='approved'?'p-auto':'p-no')}">${d.status==='pending'?'Chờ duyệt':(d.status==='approved'?'Đã đăng FAQ':(d.status==='expired'?'Tự hủy (24h)':'Từ chối'))}</span>
-            </div>
-            <div style="font-size:12.5px;margin-top:4px"><b>Câu hỏi gốc:</b> <i>${esc(d.q)}</i></div>
-            ${d.status==='pending'?`<textarea id="ed-${d.id}" rows="2">${esc(d.draft)}</textarea>
-              <div style="font-size:12px">Tự hủy sau <span class="timer" data-ttl="${d.id}">${fmt(d.ttl)}</span> nếu quá hạn.</div>
-              <div class="btns">
-                <button class="btn gpt" onclick="approveDf('${d.id}')"><span class="n">UI-13</span>Duyệt &amp; Đăng FAQ</button>
-                <button class="btn" onclick="rejectDf('${d.id}')">Từ chối</button>
-                <button class="btn danger" onclick="expireDf('${d.id}')">Quá hạn 24h (Tự hủy)</button>
-              </div>`:''}
-          </div>`).join('')}
+      <div class="chat-scroll" id="chat-scroll">
+        <div class="chat-col">
+          <div>
+            <b>1. Bản nháp <code>dang_FAQ</code> chờ TA duyệt</b>
+            ${drafts.map(d=>`<div class="ta-card ${d.status==='expired'?'exp':''}" style="margin-top:8px">
+              <div style="display:flex;justify-content:space-between;align-items:center"><b>${d.id} (${d.sec})</b>
+                <span class="pill ${d.status==='pending'?'p-ask':(d.status==='approved'?'p-auto':'p-no')}">${d.status==='pending'?'Chờ TA xác nhận':(d.status==='approved'?'Đã xác nhận & Đăng FAQ':(d.status==='expired'?'Đã tự hủy (24h)':'Từ chối'))}</span>
+              </div>
+              <div style="font-size:13px;margin-top:6px"><b>Câu hỏi gốc:</b> <i>${esc(d.q)}</i></div>
+              ${d.status==='pending'?`<textarea id="ed-${d.id}" rows="2">${esc(d.draft)}</textarea>
+                <div style="font-size:12.5px">Tự hủy sau <span class="timer" data-ttl="${d.id}">${fmt(d.ttl)}</span> nếu quá hạn không ai duyệt.</div>
+                <div class="btns">
+                  <button class="btn gpt" onclick="approveDf('${d.id}')"><span class="n">UI-13</span>Xác nhận &amp; Đăng FAQ</button>
+                  <button class="btn" onclick="rejectDf('${d.id}')">Từ chối</button>
+                  <button class="btn danger" onclick="expireDf('${d.id}')">Quá hạn 24h (Tự hủy)</button>
+                </div>`:''}
+            </div>`).join('')}
+          </div>
+          <div>
+            <b>2. Hàng chờ <code>chuyen_TA</code></b>
+            ${tickets.map(t=>`<div class="ta-card" style="margin-top:8px">
+              <div style="display:flex;justify-content:space-between;align-items:center"><b>${t.id} (${t.sec})</b>
+                <span class="pill ${t.status==='open'?'p-ask':'p-auto'}">${t.status==='open'?'Chờ xử lý':'Đã đóng'}</span>
+              </div>
+              <div style="font-size:13px;margin:6px 0">${esc(t.q)}</div>
+              ${t.status==='open'?`<button class="btn pri" onclick="closeTk('${t.id}')"><span class="n">UI-12</span>Đọc &amp; Đóng yêu cầu</button>`:''}
+            </div>`).join('')}
+          </div>
+          ${faqList.length?`<div class="box done"><b>FAQ lớp đã công bố:</b> ${faqList.map(x=>esc(x)).join(' · ')}</div>`:''}
         </div>
-        <div>
-          <b>2. Hàng chờ <code>chuyen_TA</code></b>
-          ${tickets.map(t=>`<div class="ta-card" style="margin-top:6px">
-            <div style="display:flex;justify-content:space-between"><b>${t.id} (${t.sec})</b>
-              <span class="pill ${t.status==='open'?'p-ask':'p-auto'}">${t.status==='open'?'Chờ xử lý':'Đã đóng'}</span>
-            </div>
-            <div style="font-size:13px;margin:4px 0">${esc(t.q)}</div>
-            ${t.status==='open'?`<button class="btn pri" onclick="closeTk('${t.id}')"><span class="n">UI-12</span>Đọc &amp; Đóng yêu cầu</button>`:''}
-          </div>`).join('')}
-        </div>
-        ${faqList.length?`<div class="box done"><b>FAQ lớp đã công bố:</b> ${faqList.map(x=>esc(x)).join(' · ')}</div>`:''}
       </div>`;
   }
 
-  const P={
-    1:'"Khóa hết gợi ý hoặc bắt chờ duyệt tra cứu." Bắt học viên ban đêm chờ vô ích.',
-    2:'"Hệ thống chỉ là người hướng dẫn học tập: giúp hiểu phương pháp, nhưng giảng viên chốt kiến thức cuối cùng và học viên tự giải bài." <b>(Mức nhóm chọn)</b>',
-    3:'"Giải quyết mọi bài tập nhanh nhất và tự đăng FAQ." Gây gian lận bài đang mở và lan truyền kiến thức sai.'
-  };
-  $('#promise').innerHTML=P[L];
+  $('#insp-pane').classList.toggle('hide',!showInsp);
+  $('#promise').textContent='"Hệ thống chỉ là người hướng dẫn học tập: giúp hiểu phương pháp, còn giảng viên chốt kiến thức cuối cùng và học viên phải tự hoàn thành bài tập của mình."';
 
   const T=[
-    ['tra_cuu_tai_lieu', L===1?'Cần duyệt':'Tự làm', L===1?'p-ask':'p-auto', 'Chỉ đọc; sai dễ sửa. Chờ duyệt sẽ hỏng giá trị học ban đêm.',0],
-    ['chuyen_TA', L===1?'Cấm':'Tự làm', L===1?'p-no':'p-auto', 'Chuyển nhầm chỉ tốn vài giây TA đọc & đóng; dễ đảo ngược.',0],
-    ['dang_FAQ (Khó nhất)', L===1?'Cấm':(L===2?'Cần duyệt':'Tự làm'), L===2?'p-ask':'p-no', 'TA thấy bản nháp + câu hỏi gốc; quá 24h tự hủy, tránh lan truyền sai.',1],
-    ['goi_y_bai_tap', L===2?'Đóng: Tự làm · Mở: Cấm':(L===1?'Cần duyệt':'Tự làm'), L===2?'p-auto':(L===1?'p-ask':'p-no'), 'Bài đang mở (BT3) cấm để chống gian lận; bài đã đóng (BT2) tự giải.',1]
+    ['tra_cuu_tai_lieu','Tự làm','p-auto','Chỉ đọc; sai dễ hỏi lại. Chờ duyệt sẽ phá vỡ việc học ban đêm.'],
+    ['chuyen_TA','Tự làm','p-auto','Chuyển nhầm chỉ tốn vài giây TA đọc & đóng; có Hoàn tác.'],
+    ['dang_FAQ','Cần TA duyệt','p-ask','TA thấy câu hỏi gốc + bản nháp; quá 24h tự hủy, chống lan truyền sai.'],
+    ['goi_y_bai_tap','Đóng: Tự làm · Mở: Cấm','p-no','BT3 đang mở bị Cấm để chống gian lận; BT2 đã đóng được giải thích đầy đủ.']
   ];
-  $('#tools').innerHTML=T.map(r=>`<tr class="${r[4]?'changed':''}"><td><code>${r[0]}</code></td><td><span class="pill ${r[2]}">${r[1]}</span></td><td>${r[3]}</td></tr>`).join('');
+  $('#tools').innerHTML=T.map(r=>`<tr><td><code>${r[0]}</code></td><td><span class="pill ${r[2]}">${r[1]}</span></td><td>${r[3]}</td></tr>`).join('');
 
   const A=S==='student'
     ?[
-      ['G1','HAX G1','Báo rõ đang chat với Trợ lý AI lúc TA nghỉ.'],
-      ['UI-1 / UI-6 / UI-8','HAX G10','Chặn đáp án bài đang mở; gắn nhãn chưa xác minh.'],
-      ['UI-2 / UI-7','HAX G11','Hiển thị nguồn trích dẫn §3.2, §3.3 để tự kiểm.'],
-      ['UI-3..5 / UI-9..11','HAX G9','Xem nguồn, giải thích lại, chuyển TA hoặc hủy.']
+      ['G1','HAX G1','Minh bạch vai trò Trợ lý AI ngoài giờ TA (22:45).'],
+      ['UI-1 / UI-6 / UI-8','HAX G10','Chặn đáp án BT3 đang mở; gắn nhãn chưa TA xác minh.'],
+      ['UI-2 / UI-7','HAX G11','Trích dẫn nguồn §3.2, §3.3 để học viên tự kiểm tra.'],
+      ['UI-3..5 / UI-9..11','HAX G9','Xem tài liệu gốc, giảng lại, hỏi TA (có Hoàn tác) hoặc hủy.']
     ]
     :[
-      ['UI-12','chuyen_TA (Tự làm)','TA tốn vài giây đọc và đóng yêu cầu thừa.'],
-      ['UI-13','dang_FAQ (Cần duyệt)','Đối chiếu câu hỏi gốc + bản nháp; quá 24h tự hủy.']
+      ['UI-12','chuyen_TA (Tự làm)','TA tốn vài giây đọc và đóng yêu cầu không cần thiết.'],
+      ['UI-13','dang_FAQ (Cần duyệt)','Đối chiếu câu hỏi gốc + bản nháp; xác nhận đăng hoặc quá 24h tự hủy.']
     ];
   $('#ann-list').innerHTML=A.map(a=>`<li><span class="n">${a[0]}</span><b>${a[1]}</b> — ${a[2]}</li>`).join('');
 }
 
 function switchScr(s){
   S=s;
-  document.querySelectorAll('#scr-bar button').forEach(b=>b.classList.toggle('scr',b.dataset.s===s));
+  document.querySelectorAll('#scr-bar button').forEach(b=>b.classList.toggle('scr-on',b.dataset.s===s));
   render();
 }
 
@@ -428,13 +546,9 @@ document.querySelectorAll('#scr-bar button').forEach(b=>b.onclick=()=>switchScr(
 document.querySelectorAll('#case-bar button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#case-bar button').forEach(x=>x.classList.remove('on'));
   b.classList.add('on'); C=b.dataset.c; S='student';
-  document.querySelectorAll('#scr-bar button').forEach(x=>x.classList.toggle('scr',x.dataset.s==='student'));
-  showDoc=false; showMethod=false; taFeedback=null; customTurns=[];
+  document.querySelectorAll('#scr-bar button').forEach(x=>x.classList.toggle('scr-on',x.dataset.s==='student'));
+  docSec=''; showMethod=false; taFeedback=null; customTurns=[];
   render();
-});
-document.querySelectorAll('#lv-bar button').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('#lv-bar button').forEach(x=>x.classList.remove('on'));
-  b.classList.add('on'); L=+b.dataset.l; render();
 });
 $('#ann').onchange=e=>document.body.classList.toggle('hide-n',!e.target.checked);
 $('#send-ok').onclick=()=>submitTA(false);
