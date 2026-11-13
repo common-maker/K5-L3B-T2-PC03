@@ -72,44 +72,37 @@ Theo dữ liệu B, Bài tập 3 có hạn nộp 13/11/2026 lúc 23:59 và đang
 - Bấm "Giải thích lại cách làm" để nhận hướng dẫn phương pháp, không nhận đáp số.
 - Bấm "Tôi muốn hỏi TA" để mở hộp xác nhận chuyển câu hỏi.
 
-## §4. Mức tự chủ (chặng 4)
+## §4. Mức tự chủ
 
-**4.1. Phân mức tự chủ cho từng Tool (Lập luận theo Cost-of-error):**
+**Phân mức tự chủ cho từng công cụ dựa trên hậu quả khi làm sai:**
 
-*   **Tool `tra_cuu_tai_lieu`:**
-    *   **Mức chọn:** **Tự làm**
-    *   **Vì sao:** Đây là hành động "Chỉ đọc" (Read-only), không làm thay đổi trạng thái (state) dữ liệu hệ thống. Nếu AI tìm sai hoặc giải thích nhầm, học viên đọc thấy cấn có thể hỏi lại. Sai lầm này rất "rẻ" và dễ khắc phục. 
-    *   **Phương án đã loại:** Loại mức *Cần duyệt* vì nếu mỗi lần AI tra tài liệu đều phải chờ TA duyệt thì sẽ phá vỡ hoàn toàn giá trị "Học tối muộn 24/7" của Study mode, bắt học viên chờ đợi vô ích.
+- **Công cụ tra_cuu_tai_lieu:**
+  - **Mức của nhóm:** Tự làm.
+  - **Lý do:** Công cụ này mang tính chất chỉ đọc, không làm thay đổi trạng thái dữ liệu của hệ thống. Nếu hệ thống tìm sai hoặc giải thích nhầm thì học viên phát hiện điểm vô lý có thể hỏi lại. Sai lầm này tốn rất ít chi phí để khắc phục.
+  - **Phương án đã loại:** Nhóm loại bỏ mức cần duyệt. Nếu mỗi lần tra cứu tài liệu đều phải chờ trợ giảng duyệt thì sẽ phá vỡ hoàn toàn giá trị học ban đêm của tính năng, bắt học viên chờ đợi vô ích.
 
-*   **Tool `chuyen_TA`:**
-    *   **Mức chọn:** **Tự làm**
-    *   **Vì sao:** Nếu AI chuyển nhầm (chuyển những câu hỏi vớ vẩn), hậu quả chỉ là tốn vài giây của TA để đọc và xóa (Đảo ngược dễ dàng). Nó an toàn cho học viên.
-    *   **Phương án đã loại:** Loại mức *Cấm* vì nếu AI bế tắc mà không cho phép gọi sự trợ giúp từ con người, hệ thống sẽ trở thành một ngõ cụt (Dead-end UX).
+- **Công cụ chuyen_TA:**
+  - **Mức của nhóm:** Tự làm.
+  - **Lý do:** Nếu hệ thống chuyển nhầm các câu hỏi không liên quan, hậu quả chỉ là tốn vài giây của trợ giảng để đọc và đóng yêu cầu. Việc này có thể đảo ngược dễ dàng và an toàn cho người dùng.
+  - **Phương án đã loại:** Nhóm loại bỏ mức cấm. Nếu hệ thống bế tắc mà không cho phép gọi sự trợ giúp từ con người, trải nghiệm học tập sẽ rơi vào ngõ cụt.
 
-*   **Tool `dang_FAQ` (Tool khó xếp nhất):**
-    *   **Mức chọn:** **Cần người duyệt (TA duyệt)**
-        *   *Ai duyệt:* TA hoặc Giảng viên trực.
-        *   *Người duyệt thấy gì:* Nội dung bản nháp do AI soạn, kèm theo câu hỏi gốc của học viên để đối chiếu.
-        *   *Quá hạn thì sao:* Nếu sau 24h TA không duyệt, bản nháp sẽ tự hủy, tuyệt đối không được public.
-    *   **Vì sao:** Sai lầm ở tool này cực kỳ đắt. Nếu AI tự đăng thông tin sai, nó tạo ra thảm họa "Lan truyền cái sai" (Cascading error) cho hàng trăm sinh viên khác, làm sụp đổ uy tín học liệu. Dù có xóa bài đi (Rollback) thì kiến thức sai đã đi vào đầu sinh viên.
-    *   **Phương án đã loại:** Loại mức *Tự làm* vì rủi ro lan truyền như đã nêu. Loại mức *Cấm* hoàn toàn vì sẽ lãng phí khả năng tổng hợp câu hỏi hay của AI (nếu cấm, TA sẽ phải tự gõ thủ công mọi FAQ rất vất vả).
+- **Công cụ dang_FAQ, đây cũng là công cụ khó xếp mức nhất:**
+  - **Mức của nhóm:** Cần người duyệt. Người duyệt cụ thể là trợ giảng hoặc giảng viên trực. Trước khi bấm nút, người duyệt sẽ thấy nội dung bản nháp do hệ thống soạn kèm theo câu hỏi gốc của học viên để đối chiếu. Nếu quá thời gian quy định mà không ai duyệt, bản nháp sẽ tự hủy và tuyệt đối không được hiển thị công khai.
+  - **Lý do:** Sai lầm ở công cụ này có cái giá rất đắt. Nếu hệ thống tự đăng thông tin sai, hậu quả là tạo ra thảm họa lan truyền kiến thức sai cho hàng trăm sinh viên khác, làm sụp đổ uy tín học liệu. Dù có xóa bài đăng đi thì kiến thức sai cũng đã tiếp cận sinh viên.
+  - **Phương án đã loại:** Nhóm loại bỏ mức tự làm vì rủi ro lan truyền như đã phân tích. Nhóm cũng loại bỏ mức cấm hoàn toàn vì sẽ lãng phí khả năng tổng hợp câu hỏi hay của hệ thống. Nếu cấm, trợ giảng sẽ phải tự gõ thủ công mọi câu trả lời rất vất vả.
 
-*   **Tool `goi_y_bai_tap`:**
-    *   **Mức chọn:** **Tách tool theo luật (Tự làm hoặc Cấm, phụ thuộc State hạn nộp)**
-        *   *Nếu Hạn nộp đã đóng (VD: Bài 2):* **Tự làm**. Cho phép AI đưa đáp án để học viên rút kinh nghiệm.
-        *   *Nếu Hạn nộp đang mở (VD: Bài 3):* **Cấm**. AI chỉ được phép dùng `tra_cuu_tai_lieu` để giảng lại lý thuyết.
-    *   **Vì sao:** Nếu AI đưa đáp án bài đang mở, hậu quả là gian lận thi cử. Lỗi này là không thể đảo ngược (Irreversible) vì kiến thức/đáp án đã lộ ra màn hình, học viên đã nhìn thấy.
-    *   **Phương án đã loại:** Loại mức *Cần duyệt* vì các bài tập thường được làm vào ban đêm, lúc đó không có TA để duyệt việc đưa gợi ý, học viên sẽ bị chặn luồng học tập.
+- **Công cụ goi_y_bai_tap:**
+  - **Mức của nhóm:** Tách công cụ theo luật, mức độ phụ thuộc vào trạng thái hạn nộp bài. Nếu hạn nộp đã đóng, mức đặt ra là tự làm, cho phép hệ thống đưa đáp án để học viên rút kinh nghiệm. Nếu hạn nộp đang mở, mức đặt ra là cấm hoàn toàn, hệ thống chỉ được phép dùng công cụ tra cứu tài liệu để giảng lại lý thuyết.
+  - **Lý do:** Nếu hệ thống đưa đáp án bài đang mở, hậu quả trực tiếp là học viên gian lận đánh giá. Lỗi này không thể thu hồi vì đáp án đã hiển thị ra màn hình và học viên đã nhìn thấy.
+  - **Phương án đã loại:** Nhóm loại bỏ mức cần duyệt vì học viên thường làm bài tập vào ban đêm. Lúc đó không có trợ giảng trực để duyệt việc cung cấp gợi ý, dẫn đến luồng học tập bị gián đoạn.
 
-**4.2. Trả lời các câu hỏi tổng hợp:**
+**Thử mức đã đặt trên các kịch bản thực tế:**
+- Với kịch bản đắt nhất số một là lừa hệ thống lấy đáp án bài đang mở: Cái sai đã bị chặn cứng bởi công cụ gợi ý bài tập đang ở trạng thái cấm dựa trên việc kiểm tra hạn nộp.
+- Với kịch bản đắt nhất số hai là báo tài liệu sai và hệ thống tự đính chính: Cái sai bị chặn vì công cụ đăng bài chung đang ở trạng thái cần duyệt. Hệ thống chỉ có thể tạo bản nháp và không thể làm loạn bảng tin chung của lớp.
+- Với kịch bản bình thường là hỏi định nghĩa độ lệch: Hệ thống tự động chạy công cụ tra cứu tài liệu ở mức tự làm. Trải nghiệm diễn ra mượt mà, học viên được giải đáp ngay lập tức và không phải chờ đợi vô ích.
 
-*   **Thử mức đã đặt trên 3 kịch bản:**
-    *   *Kịch bản S3 đắt nhất (Lừa AI lấy đáp án bài đang mở):* Cái sai đã bị chặn cứng bởi tool `goi_y_bai_tap` ở trạng thái **Cấm** (kiểm tra hạn 13/11).
-    *   *Kịch bản S4 đắt nhất (Báo tài liệu sai, AI đòi sửa):* Cái sai bị chặn vì tool `dang_FAQ` ở trạng thái **Cần duyệt**. AI chỉ có thể tạo nháp, không thể làm loạn bảng tin chung.
-    *   *Kịch bản U1 bình thường (Hỏi độ lệch là gì):* AI tự động chạy `tra_cuu_tai_lieu` ở mức **Tự làm**. Trải nghiệm mượt mà, học viên không phải chờ đợi vô ích.
-*   **Mức tự chủ đã đổi lời hứa nào với người dùng?**
-    *   Lời hứa của một con AI Chatbot thông thường là: *"Tôi sẽ giải quyết mọi bài tập cho bạn nhanh nhất"*.
-    *   Với mức tự chủ trên, lời hứa đổi thành: *"Tôi là người hướng dẫn học tập. Tôi giúp bạn hiểu phương pháp, nhưng Giảng viên mới là người chốt kiến thức cuối cùng và bạn phải tự giải bài tập của mình."*
+**Thay đổi lời hứa với người dùng:**
+- Thay vì đưa ra lời hứa thông thường là sẽ giải quyết mọi bài tập cho học viên nhanh nhất, mức tự chủ mới đã đổi lời hứa thành hệ thống chỉ là người hướng dẫn học tập. Hệ thống giúp học viên hiểu phương pháp, nhưng giảng viên mới là người chốt kiến thức cuối cùng và học viên phải tự hoàn thành bài tập của mình.
 
 **5. Quyết định UX:**
 
