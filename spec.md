@@ -72,13 +72,44 @@ Theo dữ liệu B, Bài tập 3 có hạn nộp 13/11/2026 lúc 23:59 và đang
 - Bấm "Giải thích lại cách làm" để nhận hướng dẫn phương pháp, không nhận đáp số.
 - Bấm "Tôi muốn hỏi TA" để mở hộp xác nhận chuyển câu hỏi.
 
-**4. Ai được báo, sau bao lâu:**
+## §4. Mức tự chủ (chặng 4)
 
-- Không tự động báo TA khi học viên chỉ xin xác nhận đáp án.
-- Nếu học viên yêu cầu hỗ trợ từ TA, giao diện hiển thị nội dung sẽ gửi và nút "Xác nhận gửi".
-- Sau khi học viên xác nhận, hệ thống gọi `chuyen_TA`.
-- Chỉ thông báo "Đã chuyển cho TA" nếu tool trả về thành công. Nếu gửi thất bại, hiển thị "Chưa gửi được, vui lòng thử lại".
-- TA trực 08:00–22:00. Thời gian phản hồi cụ thể chỉ hiển thị theo kết quả tool, không tự dự đoán.
+**4.1. Phân mức tự chủ cho từng Tool (Lập luận theo Cost-of-error):**
+
+*   **Tool `tra_cuu_tai_lieu`:**
+    *   **Mức chọn:** **Tự làm**
+    *   **Vì sao:** Đây là hành động "Chỉ đọc" (Read-only), không làm thay đổi trạng thái (state) dữ liệu hệ thống. Nếu AI tìm sai hoặc giải thích nhầm, học viên đọc thấy cấn có thể hỏi lại. Sai lầm này rất "rẻ" và dễ khắc phục. 
+    *   **Phương án đã loại:** Loại mức *Cần duyệt* vì nếu mỗi lần AI tra tài liệu đều phải chờ TA duyệt thì sẽ phá vỡ hoàn toàn giá trị "Học tối muộn 24/7" của Study mode, bắt học viên chờ đợi vô ích.
+
+*   **Tool `chuyen_TA`:**
+    *   **Mức chọn:** **Tự làm**
+    *   **Vì sao:** Nếu AI chuyển nhầm (chuyển những câu hỏi vớ vẩn), hậu quả chỉ là tốn vài giây của TA để đọc và xóa (Đảo ngược dễ dàng). Nó an toàn cho học viên.
+    *   **Phương án đã loại:** Loại mức *Cấm* vì nếu AI bế tắc mà không cho phép gọi sự trợ giúp từ con người, hệ thống sẽ trở thành một ngõ cụt (Dead-end UX).
+
+*   **Tool `dang_FAQ` (Tool khó xếp nhất):**
+    *   **Mức chọn:** **Cần người duyệt (TA duyệt)**
+        *   *Ai duyệt:* TA hoặc Giảng viên trực.
+        *   *Người duyệt thấy gì:* Nội dung bản nháp do AI soạn, kèm theo câu hỏi gốc của học viên để đối chiếu.
+        *   *Quá hạn thì sao:* Nếu sau 24h TA không duyệt, bản nháp sẽ tự hủy, tuyệt đối không được public.
+    *   **Vì sao:** Sai lầm ở tool này cực kỳ đắt. Nếu AI tự đăng thông tin sai, nó tạo ra thảm họa "Lan truyền cái sai" (Cascading error) cho hàng trăm sinh viên khác, làm sụp đổ uy tín học liệu. Dù có xóa bài đi (Rollback) thì kiến thức sai đã đi vào đầu sinh viên.
+    *   **Phương án đã loại:** Loại mức *Tự làm* vì rủi ro lan truyền như đã nêu. Loại mức *Cấm* hoàn toàn vì sẽ lãng phí khả năng tổng hợp câu hỏi hay của AI (nếu cấm, TA sẽ phải tự gõ thủ công mọi FAQ rất vất vả).
+
+*   **Tool `goi_y_bai_tap`:**
+    *   **Mức chọn:** **Tách tool theo luật (Tự làm hoặc Cấm, phụ thuộc State hạn nộp)**
+        *   *Nếu Hạn nộp đã đóng (VD: Bài 2):* **Tự làm**. Cho phép AI đưa đáp án để học viên rút kinh nghiệm.
+        *   *Nếu Hạn nộp đang mở (VD: Bài 3):* **Cấm**. AI chỉ được phép dùng `tra_cuu_tai_lieu` để giảng lại lý thuyết.
+    *   **Vì sao:** Nếu AI đưa đáp án bài đang mở, hậu quả là gian lận thi cử. Lỗi này là không thể đảo ngược (Irreversible) vì kiến thức/đáp án đã lộ ra màn hình, học viên đã nhìn thấy.
+    *   **Phương án đã loại:** Loại mức *Cần duyệt* vì các bài tập thường được làm vào ban đêm, lúc đó không có TA để duyệt việc đưa gợi ý, học viên sẽ bị chặn luồng học tập.
+
+**4.2. Trả lời các câu hỏi tổng hợp:**
+
+*   **Thử mức đã đặt trên 3 kịch bản:**
+    *   *Kịch bản S3 đắt nhất (Lừa AI lấy đáp án bài đang mở):* Cái sai đã bị chặn cứng bởi tool `goi_y_bai_tap` ở trạng thái **Cấm** (kiểm tra hạn 13/11).
+    *   *Kịch bản S4 đắt nhất (Báo tài liệu sai, AI đòi sửa):* Cái sai bị chặn vì tool `dang_FAQ` ở trạng thái **Cần duyệt**. AI chỉ có thể tạo nháp, không thể làm loạn bảng tin chung.
+    *   *Kịch bản U1 bình thường (Hỏi độ lệch là gì):* AI tự động chạy `tra_cuu_tai_lieu` ở mức **Tự làm**. Trải nghiệm mượt mà, học viên không phải chờ đợi vô ích.
+*   **Mức tự chủ đã đổi lời hứa nào với người dùng?**
+    *   Lời hứa của một con AI Chatbot thông thường là: *"Tôi sẽ giải quyết mọi bài tập cho bạn nhanh nhất"*.
+    *   Với mức tự chủ trên, lời hứa đổi thành: *"Tôi là người hướng dẫn học tập. Tôi giúp bạn hiểu phương pháp, nhưng Giảng viên mới là người chốt kiến thức cuối cùng và bạn phải tự giải bài tập của mình."*
 
 **5. Quyết định UX:**
 
