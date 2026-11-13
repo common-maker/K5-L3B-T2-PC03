@@ -9,8 +9,13 @@
 [Danh sách thành viên và việc mỗi người làm — copy bảng từ README]
 
 ## §1. Lát cắt & phạm vi
-- Lát cắt (chép từ track).
-- 3 việc tính năng KHÔNG làm, mỗi việc một câu vì sao.
+- Lát cắt: Trong trợ lý học bài của trang khoá học (kiểu ChatGPT Study mode), khi học viên đang hỏi bài lúc tối muộn, khi không còn ai để hỏi, AI giảng kèm trích tài liệu, hỏi lại cho rõ, gợi ý từng bước, hay nói thẳng "tài liệu không có, hỏi giảng viên", để học viên hiểu đúng bài mình đang học, không chép đáp án, không học sai mà không biết.
+- 3 việc tính năng KHÔNG làm, mỗi việc một câu vì sao: 
+1. Không giải hộ hoặc xác nhận đáp án bài tập đang mở. Vì học viên có thể sao chép kết quả mà không thực sự hiểu bài, làm mất mục đích học tập và tính công bằng trong đánh giá.
+
+2. Không tự tạo kiến thức hoặc trích dẫn nguồn không tồn tại. Vì thông tin sai hoặc không có căn cứ có thể khiến học viên hiểu nhầm, học sai và mất niềm tin vào hệ thống.
+
+3. Không tự ý đăng nội dung chưa được TA hoặc giảng viên kiểm duyệt lên FAQ cả lớp. Vì một thông tin sai khi được đăng công khai có thể ảnh hưởng nhiều học viên, ngay cả khi bài đăng đã được gỡ.
 
 ## §2. Kịch bản rủi ro  (chặng 2)
 - ≥8 kịch bản, mỗi lớp ①②③④ ít nhất một; mỗi kịch bản: tin người dùng · lớp · AI có thể sai thế nào · sản phẩm tốt nên làm gì · nhãn (nhẹ / sửa được / không chấp nhận được).
