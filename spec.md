@@ -219,9 +219,63 @@ Theo dữ liệu A, §3.2 quy định nếu số lượng giá trị là chẵn 
 - Thay vì đưa ra lời hứa thông thường là sẽ giải quyết mọi bài tập cho học viên nhanh nhất, mức tự chủ mới đã đổi lời hứa thành hệ thống chỉ là người hướng dẫn học tập. Hệ thống giúp học viên hiểu phương pháp, nhưng giảng viên mới là người chốt kiến thức cuối cùng và học viên phải tự hoàn thành bài tập của mình.
 
 ## §5. Prototype  (chặng 5)
-- Link hoặc file · công cụ · phần nào mock · có lời gọi AI thật không.
-- 1–2 ảnh có đánh số; mỗi số: thể hiện gì · nguyên tắc HAX/PAIR nào · mức tự chủ nào.
-- Quyết định: cách hiện độ chắc/bằng chứng và điều khiển mức tự chủ — đã nghĩ tới cách nào khác, vì sao chọn cách này.
+
+### 5.1. Thông tin chung & phạm vi mô phỏng
+
+- **File nộp:** [`prototype/index.html`](prototype/index.html) (chạy trực tiếp trên trình duyệt, không cần backend hay đăng nhập), kèm 2 ảnh chụp màn hình có đánh số: [`prototype/preview_1.png`](prototype/preview_1.png) và [`prototype/preview_2.png`](prototype/preview_2.png).
+- **Công cụ:** HTML, CSS và JavaScript thuần trong một file duy nhất, gồm 3 cột: thanh điều hướng bên trái (chuyển màn hình ` Học viên` / `Phía TA` và 3 tình huống học tập), vùng tương tác chính ở giữa, và cột phải hiển thị **Lời hứa với người học**, **Mức tự chủ nhóm đã chọn** cùng **Chú thích HAX/PAIR** (bật/tắt bằng nút `Ẩn bảng HAX` và ô `Hiện nhãn UI & HAX`).
+- **Phần mock:**
+  - **Học liệu & trạng thái khoá học:** Dữ liệu dựng `DOCS` (`§3.1`, `§3.2`, `§3.3` từ Dữ liệu A) và `Dữ liệu B` (Bài tập 2 đã đóng ngày `06/11` đáp án `6`; Bài tập 3 hạn `13/11/2026 23:59` đang mở; giờ trực TA `08:00–22:00`; thời điểm giả lập `22:45` ngoài giờ trực).
+  - **Hàng chờ phía TA & trạng thái đồng bộ:** Khởi tạo sẵn 1 yêu cầu `TK-098` và 1 bản nháp `DF-201` (kèm đồng hồ đếm ngược 24h `86380` giây). Mọi thao tác gửi từ màn hình Học viên (`tickets`, `drafts`, `faqList`) đồng bộ trực tiếp trong bộ nhớ trình duyệt sang màn hình Phía TA.
+  - **Hội thoại & bộ xử lý ca lạ (`sendCaLa()`):** Ba tình huống chính dùng câu trả lời thiết kế ở §3; ô nhập `"Hỏi tiếp hoặc nhập thử một ca lạ..."` dùng khớp từ khóa/regex cục bộ để mô phỏng bộ hard tests của Track T2 (nhắc nguồn không tồn tại `slide 12`, nội dung chưa mở `Buổi 7 / p-value`, bài đã đóng `Bài tập 2`, lỗi tài liệu `§3.3` với phương sai `0.09`, xin đăng FAQ, hỏi hạn nộp/hàm Excel, tự ti năng lực, hoặc ngoài phạm vi tài liệu).
+  - **Mô phỏng ngoại lệ:** Modal gửi TA có nút `Mô phỏng gửi lỗi` (`Chưa gửi được`) và màn hình Phía TA có nút `Quá hạn 24h (Tự hủy)` để kiểm thử tức thời thay vì chờ đủ 24 giờ.
+- **Lời gọi AI thật:** **Không có** (0 API call tới LLM, không chứa API key trong mã nguồn).
+
+### 5.2. Ảnh màn hình có đánh số, nguyên tắc HAX/PAIR & mức tự chủ
+
+#### Ảnh 1 — Kịch bản 5: Bài tập 3 đang mở (chặn xác nhận đáp án)
+
+![Ảnh 1: Màn hình Học viên — Kịch bản 5 (Bài tập 3 đang mở)](prototype/preview_1.png)
+
+| Số đánh dấu | Thể hiện gì trên màn hình | Nguyên tắc HAX / PAIR | Mức tự chủ thể hiện |
+|---|---|---|---|
+| `G1` | Nhãn `Trợ lý AI · 22:45 (TA nghỉ)` ở góc trên phải | **HAX G1** (minh bạch hệ thống là AI và đang ngoài giờ trực TA 08:00–22:00) | Bối cảnh vận hành (học viên tự học ban đêm, `chuyen_TA` gửi vào hàng chờ) |
+| `UI-1 · G10` | Thẻ cảnh báo vàng: *"Bài tập 3 đang mở – AI chỉ hỗ trợ phương pháp, không xác nhận đáp án."* | **HAX G10** (thu hẹp phạm vi dịch vụ khi chạm rủi ro gian lận học thuật) | **`goi_y_bai_tap` ở mức Cấm** — hoàn toàn không có nút xác nhận Đúng/Sai hay giải hộ (chỉ mở giải khi là Bài tập 2 đã đóng ở ô ca lạ) |
+| `UI-2 · G11` | Khung bằng chứng: *"Nguồn tham khảo: Theo tài liệu Buổi 3 – §3.2: Trung vị. (Hạn BT3: 13/11/2026 23:59)"* | **HAX G11** & **PAIR Explainability + Trust** (nêu rõ căn cứ từ Dữ liệu A & B để giải thích lý do từ chối) | **`tra_cuu_tai_lieu` ở mức Tự làm** (chỉ đọc, tự động trích mã mục) |
+| `UI-3 · G9` | Nút `Xem tài liệu §3.2` / `Ẩn tài liệu §3.2` (trong ảnh đã bấm mở khung vàng trích nguyên văn `§3.2`, tô sáng câu quy tắc số chẵn) | **HAX G9** & **PAIR Explainability + Trust** (cho phép học viên tự kiểm tra nguồn gốc ngay trong luồng chat) | **`tra_cuu_tai_lieu` ở mức Tự làm** |
+| `UI-4` | Nút `Giải thích lại cách làm` (trong ảnh đã bấm mở khung `Phương pháp (§3.2)` hướng dẫn tìm vị trí thứ 4 và thứ 5, không lộ đáp số) | **HAX G10** & **PAIR Graceful Failure** (không bỏ rơi người học sau khi từ chối) | **`tra_cuu_tai_lieu` (Tự làm)** thay thế cho **`goi_y_bai_tap` (Cấm)** |
+| `UI-5` | Nút `Tôi muốn hỏi TA` (mở modal xem trước & sửa câu hỏi, có `Xác nhận gửi` và `Mô phỏng gửi lỗi`) | **HAX G9** (chuyển tiếp sang con người khi học viên vẫn cần hỗ trợ thêm) | **`chuyen_TA` ở mức Tự làm** (gửi sau khi xác nhận trong modal) |
+
+#### Ảnh 2 — Kịch bản 7: Góp ý §3.2 báo sai tài liệu (chặn tự đăng FAQ & tạo bản nháp chờ TA duyệt)
+
+![Ảnh 2: Màn hình Học viên — Kịch bản 7 (Góp ý §3.2 và tạo bản nháp chờ TA duyệt)](prototype/preview_2.png)
+
+| Số đánh dấu | Thể hiện gì trên màn hình | Nguyên tắc HAX / PAIR | Mức tự chủ thể hiện |
+|---|---|---|---|
+| `UI-6 · G10` | Thẻ vàng: *"Phản hồi về tài liệu cần được kiểm tra trước khi công bố."* | **HAX G10** (không hùa theo nhận định chưa kiểm chứng của người học) | **`dang_FAQ` ở mức Cần TA duyệt** (chặn công bố tự động) |
+| `UI-8 · G10` | Thẻ đỏ: *"Chưa được TA xác minh"* | **HAX G10** & **PAIR Trust** (gắn nhãn rõ trạng thái chưa kiểm chứng để ngăn hiểu nhầm) | **`dang_FAQ` ở mức Cần TA duyệt** — tuyệt đối không có nút tự đăng lên FAQ lớp |
+| `UI-7 · G11` | Khung bằng chứng: *"Trích dẫn nguồn: §3.2 – Trung vị (số lượng chẵn lấy trung bình cộng hai số giữa). Không có nút tự đăng FAQ."* | **HAX G11** (giải thích lý do AI không tự sửa tài liệu hay đăng FAQ) | **`tra_cuu_tai_lieu` (Tự làm)** đối chiếu nguyên văn Dữ liệu A |
+| Hộp xác nhận xanh lá | *"Đã gửi cho TA (TK-101) & tạo bản nháp DF-202 chờ duyệt (tự hủy sau 24h)."* kèm nút **`Hoàn tác`** và **`Mở phía TA`** (badge `Phía TA` tăng từ `2` lên `4`) | **HAX G9** & **PAIR Errors + Graceful Failure** (cho phép rút lại ngay nếu gửi nhầm; nếu bấm `Mô phỏng gửi lỗi` sẽ hiện hộp đỏ `"Chưa gửi được"` kèm `Thử lại`) | **`chuyen_TA` (Tự làm có Hoàn tác)** + **`dang_FAQ` (Cần TA duyệt — chỉ mới tạo bản nháp)** |
+| `UI-9 · G9`, `UI-10 · G9`, `UI-11` | Bộ 3 nút: `Xem nguồn §3.2` (`UI-9`), `Gửi phản hồi cho TA` (`UI-10`), `Hủy / Quay lại` (`UI-11`) | **HAX G9** (đối chiếu & gửi phản hồi sửa lỗi) & **HAX G8** (`Hủy / Quay lại` gạt bỏ nhanh thao tác) | Kích hoạt **`tra_cuu_tai_lieu` (Tự làm)** hoặc luồng tạo bản nháp **`dang_FAQ` (Cần TA duyệt)** |
+
+- **Các phần tương tác bổ sung trong [`prototype/index.html`](prototype/index.html) (ngoài 2 ảnh chụp Học viên):**
+  - **Màn hình 2 (`🧑‍🏫 Phía TA` — bấm `Mở phía TA` hoặc mục `Phía TA` bên trái):** Hiển thị **`UI-13`** (`Xác nhận & Đăng FAQ` bên cạnh `Từ chối` và `Quá hạn 24h (Tự hủy)` cùng `Câu hỏi gốc`, ô sửa `Bản nháp`, đồng hồ đếm ngược 24h) để hoàn tất luồng **`dang_FAQ` (Cần TA duyệt)**; và **`UI-12`** (`Đọc & Đóng yêu cầu`) ở *Hàng chờ `chuyen_TA`* để xử lý các câu chuyển nhầm từ mức **Tự làm**.
+  - **Tình huống 3 (`Buổi 3 · Hỏi "độ lệch"`):** Áp dụng **HAX G10** cho lỗi mơ hồ — AI hỏi lại người học chọn `Phương sai` hay `Độ lệch chuẩn` trong `§3.3` trước khi trích dẫn chi tiết.
+  - **Luồng Demo 4 phút (bấm trọn vẹn từ đầu tới cuối):** Mở `prototype/index.html` → thử `UI-3`, `UI-4`, `UI-5` ở Kịch bản 5 → chuyển Kịch bản 7 bấm `UI-10` → `Xác nhận gửi` → bấm `Hoàn tác` hoặc `Mở phía TA` → trên màn hình TA kiểm tra `UI-13` (duyệt đăng FAQ / tự hủy 24h) và `UI-12` → quay lại gõ ca lạ (`"slide 12"`, `"Bài tập 2"`, `"§3.3 sai khi phương sai = 0.09"`) để kiểm chứng phản ứng nhất quán theo mức tự chủ §4.
+
+### 5.3. Quyết định thiết kế UX trên prototype
+
+- **Quyết định 1 — Cách hiển thị độ chắc và bằng chứng AI dựa vào:**
+  - *Phương án đã cân nhắc:* (1) Hiển thị điểm phần trăm tin cậy (ví dụ: `"Độ chắc: 85%"`); (2) Chỉ nhắc tên tài liệu dạng văn bản chung chung trong câu trả lời; (3) Dùng **thẻ trạng thái hành động theo ngữ cảnh** (`UI-1`, `UI-6`, `UI-8`) + **khung bằng chứng mã mục/hạn nộp** (`UI-2`, `UI-7`) + **nút mở đoạn tài liệu gốc tô sáng ngay trong chat** (`UI-3`, `UI-9`).
+  - *Phương án chọn:* Chọn phương án **(3)**.
+  - *Vì sao chọn:* Trong bối cảnh học tập ban đêm (`22:45`), người học cần biết **vì sao AI dừng lại** và **đoạn giáo trình nào làm căn cứ** để tự kiểm chứng trong 1 lần bấm mà không phải chuyển tab tìm tài liệu (đáp ứng **HAX G11** và **PAIR Explainability + Trust**).
+  - *Vì sao loại các phương án kia:* Loại `%` tin cậy vì phần trăm giả lập dễ tạo cảm giác an tâm sai lệch (*over-trust*) khi lỗi nằm ở ngữ cảnh/quy tắc (như bài đang mở ở Kịch bản 5 hoặc câu gốc `§3.3` có lỗi). Loại việc chỉ nhắc tên chung chung vì không đưa được bằng chứng cụ thể từ Dữ liệu A/B để học viên đối chiếu ngay.
+
+- **Quyết định 2 — Cách điều khiển và thể hiện mức tự chủ trên giao diện:**
+  - *Phương án đã cân nhắc:* (1) Giữ sẵn nút `"Xác nhận đáp án"` / `"Đăng lên FAQ"` rồi hiện popup chặn khi bấm, hoặc cho người học tự bật/tắt công tắc quyền AI; (2) Khóa toàn bộ nút gửi TA và FAQ để giữ AI chỉ trả lời văn bản tĩnh; (3) **Nhúng cứng mức tự chủ §4 vào quyền hiển thị nút theo từng vai trò (Học viên vs. TA)**, kèm modal xác nhận + nút `Hoàn tác` cho `chuyen_TA`, màn hình `Phía TA` riêng cho `dang_FAQ`, và bảng đối chiếu ở cột phải (`insp-pane`).
+  - *Phương án chọn:* Chọn phương án **(3)**.
+  - *Vì sao chọn:* Xóa hẳn nút thuộc mức **Cấm** (`goi_y_bai_tap` khi BT3 mở) giúp triệt tiêu thao tác sai ngay từ thiết kế; nút `Hoàn tác` bảo vệ mức **Tự làm** của `chuyen_TA`; tách màn hình `Phía TA` giải quyết trực tiếp khoảng trống của ChatGPT Study Mode thật (vốn không có TA đứng sau) để TA đối chiếu `Câu hỏi gốc` trước khi công bố `dang_FAQ`. Bảng bên phải cho phép người demo đối chiếu trực tiếp quy tắc §4 với từng vị trí `UI-*`, đồng thời có nút `Ẩn bảng HAX` để xem giao diện như sản phẩm thực tế.
+  - *Vì sao loại các phương án kia:* Loại việc hiển thị nút cấm rồi báo lỗi vì tạo *false affordance* gây ức chế cho người học. Loại công tắc tự đổi quyền vì học viên có thể tự nới quyền để lấy đáp án bài đang mở. Loại việc khóa luôn `chuyen_TA` vì sẽ đẩy người học vào ngõ cụt khi gặp lỗi học liệu (Kịch bản 7 hoặc ca lỗi `§3.3`).
 
 ## §6. Tốt là gì - chặng 6
 
