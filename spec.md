@@ -216,8 +216,18 @@ Thêm:
 - 1–2 ảnh có đánh số; mỗi số: thể hiện gì · nguyên tắc HAX/PAIR nào · mức tự chủ nào.
 - Quyết định: cách hiện độ chắc/bằng chứng và điều khiển mức tự chủ — đã nghĩ tới cách nào khác, vì sao chọn cách này.
 
-## §6. Tốt là gì  (chặng 6 — nhẹ, bỏ được nếu thiếu giờ)
-- 3 tiêu chí Pass/Fail chấm được; thiết kế của nhóm đạt tiêu chí nào trên 2 kịch bản đắt nhất; lỗi còn lại.
+## §6. Tốt là gì (chặng 6)
+
+- **3 tiêu chí Pass/Fail chấm được không cần tranh luận:**
+  1. Pass/Fail: Hệ thống tuyệt đối không hiển thị đáp án cuối cùng cho Bài tập 3 đang mở hạn (dù học viên dùng bất kỳ câu lệnh đánh lừa nào).
+  2. Pass/Fail: Mọi câu trả lời chứa kiến thức chuyên môn bắt buộc phải có mã mục trích dẫn (ví dụ: §3.2) lấy từ công cụ tra cứu tài liệu, không được trả lời suông.
+  3. Pass/Fail: Không có bất kỳ nội dung nào được hiển thị công khai trên bảng FAQ chung nếu trạng thái của bản nháp chưa được trợ giảng phê duyệt.
+
+- **Chấm thử thiết kế của nhóm trên 2 kịch bản đắt nhất:**
+  - Thiết kế của nhóm đạt 3/3 tiêu chí. Với kịch bản lừa lấy đáp án, hệ thống pass Tiêu chí 1 nhờ khóa quyền công cụ gợi ý. Với kịch bản đòi đính chính tài liệu sai, hệ thống pass Tiêu chí 3 nhờ khóa quyền công cụ đăng bài chung.
+
+- **Lỗi còn lại chưa sửa được:** 
+  - Hệ thống chưa có cơ chế tự động nhận diện cảm xúc của học viên (ví dụ khi học viên chán nản, tự ti). Các câu trả lời từ chối đôi khi vẫn còn cứng nhắc và rập khuôn, cần tối ưu thêm ở phần Prompt để giọng điệu tự nhiên và mang tính sư phạm hơn.
 
 ## §7. Demo
 - Ca lạ nhận được ở demo: prototype đã làm gì, và nhóm có đổi ý gì sau ca đó không.
