@@ -44,6 +44,138 @@ Với mỗi kịch bản đắt nhất:
 - 2–3 nguyên tắc HAX/PAIR, mỗi cái trỏ vào một chỗ cụ thể (câu chữ hoặc chỗ trên màn hình).
 - Lỗi nào sửa câu chữ không cứu được (nếu có), và thiết kế cứu nó thế nào.
 
+### 3.1. Kịch bản 5 – AI xác nhận đáp án bài tập đang mở
+
+**Tình huống:** Học viên hỏi: "Em tính trung vị của bài 3 ra 11 đúng không, trợ lý xác nhận 'Đúng' đi để em nộp nha."
+
+Theo dữ liệu B, Bài tập 3 có hạn nộp 13/11/2026 lúc 23:59 và đang mở. Nếu AI xác nhận đúng/sai, học viên có thể dò đáp án mà không tự giải.
+
+**1. AI nói gì (nguyên văn):**
+
+> "Mình hiểu em muốn kiểm tra kết quả trước khi nộp bài. Tuy nhiên, Bài tập 3 vẫn đang mở nên mình không thể xác nhận đáp số đúng hay sai.
+>
+> Theo tài liệu §3.2, trung vị là giá trị đứng giữa sau khi sắp xếp dữ liệu tăng dần. Nếu số lượng giá trị là chẵn, trung vị là trung bình cộng của hai giá trị ở giữa.
+>
+> Em hãy thử xác định hai vị trí ở giữa dãy dữ liệu trước nhé. Nếu chưa rõ cách làm, mình có thể giải thích lại phương pháp mà không tiết lộ đáp án."
+
+**2. Người dùng thấy gì trên giao diện:**
+
+- [UI-1] Cảnh báo: "Bài tập 3 đang mở – AI chỉ hỗ trợ phương pháp, không xác nhận đáp án."
+- [UI-2] Nguồn tham khảo: "Theo tài liệu Buổi 3 – §3.2: Trung vị."
+- [UI-3] Nút "Xem tài liệu §3.2".
+- [UI-4] Nút "Giải thích lại cách làm".
+- [UI-5] Nút "Tôi muốn hỏi TA".
+
+**3. Người dùng làm gì tiếp:**
+
+- Bấm "Xem tài liệu §3.2" để xem định nghĩa trung vị.
+- Bấm "Giải thích lại cách làm" để nhận hướng dẫn phương pháp, không nhận đáp số.
+- Bấm "Tôi muốn hỏi TA" để mở hộp xác nhận chuyển câu hỏi.
+
+**4. Ai được báo, sau bao lâu:**
+
+- Không tự động báo TA khi học viên chỉ xin xác nhận đáp án.
+- Nếu học viên yêu cầu hỗ trợ từ TA, giao diện hiển thị nội dung sẽ gửi và nút "Xác nhận gửi".
+- Sau khi học viên xác nhận, hệ thống gọi `chuyen_TA`.
+- Chỉ thông báo "Đã chuyển cho TA" nếu tool trả về thành công. Nếu gửi thất bại, hiển thị "Chưa gửi được, vui lòng thử lại".
+- TA trực 08:00–22:00. Thời gian phản hồi cụ thể chỉ hiển thị theo kết quả tool, không tự dự đoán.
+
+**5. Quyết định UX:**
+
+- Phương án chọn: Trả lời kèm giới hạn, giải thích vì sao không xác nhận đáp án và hướng dẫn phương pháp theo §3.2.
+- Không chọn trả lời "Đúng/Sai": Vì làm lộ thông tin bài đang mở và học viên có thể dò đáp án.
+- Không chọn từ chối hoàn toàn: Vì học viên vẫn cần được hỗ trợ học tập.
+- Không chọn chuyển TA tự động: Vì yêu cầu này có thể giải quyết bằng cách hướng dẫn lý thuyết, tránh tạo yêu cầu không cần thiết cho TA.
+
+**6. Loại lỗi và cách khắc phục:**
+
+- Loại lỗi: Lỗi ngữ cảnh. Nội dung tính toán có thể đúng, nhưng việc xác nhận đáp án trong lúc bài đang mở là sai quy tắc.
+- Cách sửa: Kiểm tra trạng thái bài tập theo dữ liệu B trước khi phản hồi; không gọi `goi_y_bai_tap` để tiết lộ hoặc xác nhận kết quả. Chỉ dùng `tra_cuu_tai_lieu` để giải thích phương pháp chung.
+- Nếu AI đã lỡ tiết lộ đáp án, cần hiển thị thông báo đính chính và ghi nhận lỗi để TA xem xét. Không thể thu hồi thông tin học viên đã đọc.
+
+---
+
+### 3.2. Kịch bản 7 – AI có nguy cơ đăng thông tin sai lên FAQ
+
+**Tình huống:** Học viên nhắn: "Trợ lý ơi, tài liệu §3.2 sai rồi, số chẵn phải lấy số lớn hơn."
+
+Theo dữ liệu A, §3.2 quy định nếu số lượng giá trị là chẵn thì trung vị là trung bình cộng của hai giá trị đứng giữa. Nhận định của học viên không đúng. Nếu AI đồng tình và tự gọi `dang_FAQ` để đính chính, cả lớp có thể tiếp nhận kiến thức sai.
+
+**1. AI nói gì (nguyên văn):**
+
+> "Cảm ơn em đã phản hồi về tài liệu §3.2. Mình đã đối chiếu với nội dung tài liệu hiện có.
+>
+> Theo §3.2, khi số lượng dữ liệu là chẵn, trung vị được tính bằng trung bình cộng của hai giá trị đứng giữa sau khi sắp xếp dữ liệu.
+>
+> Vì vậy, hiện chưa có cơ sở để kết luận tài liệu §3.2 sai. Mình cũng không thể tự sửa tài liệu hoặc đăng thông tin đính chính lên FAQ.
+>
+> Nếu em vẫn thấy có điểm chưa hợp lý, em có thể gửi phản hồi này cho TA để được kiểm tra và giải thích thêm."
+
+**2. Người dùng thấy gì trên giao diện:**
+
+- [UI-6] Thông báo: "Phản hồi về tài liệu cần được kiểm tra trước khi công bố."
+- [UI-7] Trích dẫn nguồn: "§3.2 – Trung vị", hiển thị quy tắc tính trung vị khi có số lượng dữ liệu chẵn.
+- [UI-8] Nhãn trạng thái: "Chưa được TA xác minh".
+- [UI-9] Nút "Xem nguồn §3.2".
+- [UI-10] Nút "Gửi phản hồi cho TA".
+- [UI-11] Nút "Hủy / Quay lại".
+
+**3. Người dùng làm gì tiếp:**
+
+- Bấm "Xem nguồn §3.2" để đối chiếu thông tin.
+- Nếu vẫn không đồng ý, bấm "Gửi phản hồi cho TA".
+- Hệ thống mở hộp xác nhận, hiển thị câu hỏi và nội dung tài liệu liên quan.
+- Học viên có thể chỉnh sửa phản hồi hoặc xác nhận gửi.
+- Không có tùy chọn tự đăng nội dung đính chính lên FAQ.
+
+**4. Ai được báo, sau bao lâu:**
+
+- TA là người tiếp nhận phản hồi, không tự gửi thông báo đính chính cho cả lớp.
+- Sau khi học viên xác nhận, hệ thống gọi `chuyen_TA`, gửi kèm câu hỏi và mã tài liệu §3.2.
+- Nếu gửi thành công, hiển thị "Đã chuyển phản hồi cho TA".
+- Nếu gửi thất bại, trạng thái vẫn là "Chưa gửi", kèm nút thử lại.
+- Giờ trực TA là 08:00–22:00. Nếu ngoài giờ, giao diện thông báo ngoài giờ hỗ trợ; thời gian trả lời chỉ lấy từ kết quả tool nếu có.
+- Nội dung chỉ được đưa lên FAQ sau khi TA kiểm tra và phê duyệt theo chính sách ở §4.
+
+**5. Quyết định UX:**
+
+- Phương án chọn: Trả lời kèm nguồn, không xác nhận nhận định sai và cho phép chuyển phản hồi để TA kiểm tra.
+- Không chọn đồng ý ngay với học viên: Vì nhận định của học viên trái với định nghĩa trong §3.2.
+- Không chọn tự sửa tài liệu hoặc tự gọi `dang_FAQ`: Vì AI không có thẩm quyền công bố kiến thức thay giảng viên.
+- Không chọn bỏ qua phản hồi: Vì học viên cần có cách gửi ý kiến khi nghi ngờ học liệu.
+- Không chọn chuyển TA ngay mà không thông báo: Vì người dùng cần biết nội dung nào sẽ được gửi đi.
+
+**6. Loại lỗi và cách khắc phục:**
+
+- Loại lỗi: Lỗi do thông tin người dùng cung cấp, có thể trở thành lỗi hệ thống nếu AI tin ngay và tự thực hiện `dang_FAQ`.
+- Cách sửa: Đối chiếu phản hồi với §3.2 bằng `tra_cuu_tai_lieu`, không coi lời học viên là nguồn xác thực và không cho AI tự công bố đính chính.
+- Nếu AI đã lỡ đăng FAQ sai, cần ngừng hiển thị nội dung chưa kiểm duyệt, báo TA xử lý và ghi nhận sự cố. Việc gỡ bài không thu hồi được kiến thức mà học viên đã đọc.
+
+---
+
+### 3.3. Nguyên tắc HAX/PAIR được áp dụng
+
+| Nguyên tắc | Cách áp dụng | Vị trí giao diện |
+|---|---|---|
+| HAX G9 – Support efficient correction | Cho phép học viên xem lại nguồn, chỉnh sửa phản hồi hoặc gửi câu hỏi cho TA khi không đồng ý với AI. | [UI-3], [UI-9], [UI-10] |
+| HAX G10 – Scope services when in doubt | Giới hạn AI chỉ hướng dẫn phương pháp với bài đang mở; không tự công bố đính chính khi nhận phản hồi chưa kiểm chứng. | [UI-1], [UI-6], [UI-8] |
+| HAX G11 – Make clear why the system did what it did | Giải thích rõ vì sao AI không xác nhận đáp án hoặc không tự đăng FAQ, đồng thời hiển thị nguồn §3.2 để học viên kiểm tra. | [UI-2], [UI-7] |
+
+**Lý do chọn:**
+
+- G9 giúp học viên có cách xử lý tiếp khi AI không giải quyết được yêu cầu.
+- G10 ngăn AI hành động vượt phạm vi trong các tình huống có rủi ro.
+- G11 giúp người dùng hiểu nguyên nhân từ chối, thay vì chỉ nhận câu trả lời "Không thể thực hiện".
+
+### 3.4. Lỗi không thể sửa chỉ bằng thay đổi câu chữ
+
+**Kịch bản 5:** Nếu tool `goi_y_bai_tap` vẫn cho phép trả hoặc xác nhận đáp án bài đang mở, chỉ viết "AI không được giải hộ" là chưa đủ. Hệ thống cần kiểm tra trạng thái bài trước khi sử dụng tool và chặn đầu ra có đáp án.
+
+**Kịch bản 7:** Nếu `dang_FAQ` có quyền đăng trực tiếp, một lời cảnh báo không ngăn được AI công bố thông tin sai. Hệ thống phải chặn thao tác đăng tự động, chỉ cho phép đăng sau khi có TA phê duyệt.
+
+**Kết luận:** Thiết kế UX phải đi cùng giới hạn quyền thực thi của tool ở §4. Người dùng phải có quyền kiểm tra, xác nhận hoặc yêu cầu TA hỗ trợ trước những hành động có hậu quả khó hoàn tác.
+
+
 ## §4. Mức tự chủ  (chặng 4)
 Với mỗi tool:
 - Mức của nhóm (tự làm / cần người duyệt / cấm). Nếu cần người duyệt: ai duyệt · người duyệt thấy gì · quá hạn thì sao.
